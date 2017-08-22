@@ -1,0 +1,650 @@
+<!DOCTYPE html>
+<html >
+<head>
+
+    <!--[if lt IE 9]>
+        <style>body {display: none; background: none !important} </style>
+        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
+    <![endif]-->
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<meta name="format-detection" content="telephone=no" />
+<meta name="author" content="Lollipop" />
+
+
+
+<meta name="description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta name="keywords" content="collection,java8">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JAVA8的HashMap">
+<meta property="og:url" content="http://yoursite.com/2017/08/20/HashMap/index.html">
+<meta property="og:site_name" content="小白爬坑之旅">
+<meta property="og:description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta property="og:image" content="http://yoursite.com/img/HashMap/hashmap.jpg">
+<meta property="og:updated_time" content="2017-08-22T16:17:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="JAVA8的HashMap">
+<meta name="twitter:description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta name="twitter:image" content="http://yoursite.com/img/HashMap/hashmap.jpg">
+
+<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
+
+
+    <link rel="alternate" href="/atom.xml" title="小白爬坑之旅" type="application/atom+xml">
+
+
+
+    <link rel="shortcut icon" href="/apple-touch-icon.png">
+
+
+
+    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
+
+
+
+    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
+
+
+
+    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
+    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
+
+
+<link rel="stylesheet" href="/css/style.css">
+
+
+
+<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
+
+
+<title>JAVA8的HashMap | 小白爬坑之旅</title>
+
+<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
+
+<script>
+    var yiliaConfig = {
+        fancybox: true,
+        animate: true,
+        isHome: false,
+        isPost: true,
+        isArchive: false,
+        isTag: false,
+        isCategory: false,
+        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
+        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
+        search: undefined
+    }
+</script>
+
+
+    <script> yiliaConfig.jquery_ui = [false]; </script>
+
+
+
+    <script> yiliaConfig.rootUrl = "\/";</script>
+
+
+
+
+
+
+</head>
+<body>
+  <div id="container">
+    <div class="left-col">
+    <div class="overlay"></div>
+<div class="intrude-less">
+    <header id="header" class="inner">
+        <a href="/" class="profilepic">
+            <img src="/img/AcFun.png" class="animated zoomIn">
+        </a>
+        <hgroup>
+          <h1 class="header-author"><a href="/">Lollipop</a></h1>
+        </hgroup>
+
+        
+
+        
+
+
+        
+            <div id="switch-btn" class="switch-btn">
+                <div class="icon">
+                    <div class="icon-ctn">
+                        <div class="icon-wrap icon-house" data-idx="0">
+                            <div class="birdhouse"></div>
+                            <div class="birdhouse_holes"></div>
+                        </div>
+                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
+                            <div class="ribbon"></div>
+                        </div>
+                        
+                        <div class="icon-wrap icon-link hide" data-idx="2">
+                            <div class="loopback_l"></div>
+                            <div class="loopback_r"></div>
+                        </div>
+                        
+                        
+                        <div class="icon-wrap icon-me hide" data-idx="3">
+                            <div class="user"></div>
+                            <div class="shoulder"></div>
+                        </div>
+                        
+                    </div>
+                    
+                </div>
+                <div class="tips-box hide">
+                    <div class="tips-arrow"></div>
+                    <ul class="tips-inner">
+                        <li>菜单</li>
+                        <li>标签</li>
+                        
+                        <li>友情链接</li>
+                        
+                        
+                        <li>关于我</li>
+                        
+                    </ul>
+                </div>
+            </div>
+        
+
+        <div id="switch-area" class="switch-area">
+            <div class="switch-wrap">
+                <section class="switch-part switch-part1">
+                    <nav class="header-menu">
+                        <ul>
+                        
+                            <li><a href="/">主页</a></li>
+                        
+                            <li><a href="/archives/">所有文章</a></li>
+                        
+                            <li><a href="/tags/">标签云</a></li>
+                        
+                            <li><a href="/about/">关于我</a></li>
+                        
+                        </ul>
+                    </nav>
+                    <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" href="mailto:a1334416010@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" href="https://github.com/Jimmy2Angel" title="GitHub"></a>
+                            
+                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=44324803" title="网易云音乐"></a>
+                            
+                        </ul>
+                    </nav>
+                </section>
+                
+                
+                <section class="switch-part switch-part2">
+                    <div class="widget tagcloud" id="js-tagcloud">
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IOC/">IOC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sping/">Sping</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collection/">collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8/">java8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具使用/">工具使用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+                    </div>
+                </section>
+                
+                
+                
+                <section class="switch-part switch-part3">
+                    <div id="js-friends">
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
+                    
+                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
+                    
+                    </div>
+                </section>
+                
+
+                
+                
+                <section class="switch-part switch-part4">
+                
+                    <div id="js-aboutme">小白爬坑中。。。</div>
+                </section>
+                
+            </div>
+        </div>
+    </header>                
+</div>
+    </div>
+    <div class="mid-col">
+      <nav id="mobile-nav">
+      <div class="overlay">
+          <div class="slider-trigger"></div>
+          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Lollipop</a></h1>
+      </div>
+    <div class="intrude-less">
+        <header id="header" class="inner">
+            <a href="/" class="profilepic">
+                <img src="/img/AcFun.png" class="animated zoomIn">
+            </a>
+            <hgroup>
+              <h1 class="header-author"><a href="/" title="回到主页">Lollipop</a></h1>
+            </hgroup>
+            
+            <nav class="header-menu">
+                <ul>
+                
+                    <li><a href="/">主页</a></li>
+                
+                    <li><a href="/archives/">所有文章</a></li>
+                
+                    <li><a href="/tags/">标签云</a></li>
+                
+                    <li><a href="/about/">关于我</a></li>
+                
+                <div class="clearfix"></div>
+                </ul>
+            </nav>
+            <nav class="header-nav">
+                        <ul class="social">
+                            
+                                <a class="fa Email" target="_blank" href="mailto:a1334416010@gmail.com" title="Email"></a>
+                            
+                                <a class="fa GitHub" target="_blank" href="https://github.com/Jimmy2Angel" title="GitHub"></a>
+                            
+                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=44324803" title="网易云音乐"></a>
+                            
+                        </ul>
+            </nav>
+        </header>                
+    </div>
+    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+</nav>
+      <div class="body-wrap"><article id="post-HashMap" class="article article-type-post" itemscope itemprop="blogPost">
+  
+    <div class="article-meta">
+      <a href="/2017/08/20/HashMap/" class="article-date">
+      <time datetime="2017-08-20T13:35:54.000Z" itemprop="datePublished">2017-08-20</time>
+</a>
+
+
+    </div>
+  
+  <div class="article-inner">
+    
+      <input type="hidden" class="isFancy" />
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      JAVA8的HashMap
+    </h1>
+  
+
+      </header>
+      
+      <div class="article-info article-info-post">
+        
+    <div class="article-category tagcloud">
+    <a class="article-category-link" href="/categories/JAVASE/">JAVASE</a>
+    </div>
+
+
+        
+    <div class="article-tag tagcloud">
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/collection/">collection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/java8/">java8</a></li></ul>
+    </div>
+
+        <div class="clearfix"></div>
+      </div>
+      
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+          
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。<a id="more"></a></p>
+<h2 id="底层实现简介"><a href="#底层实现简介" class="headerlink" title="底层实现简介"></a>底层实现简介</h2><p>数组加链表这个没什么好说的，看下面这个图就能明白了(java8当中当链表达到一定长度就会转换成红黑树，这个之后再说)。还是从源码来看吧，这里时间问题不可能每个方法都拿出来讲了，挑几个重要的方法来说。</p>
+<center><img src="/img/HashMap/hashmap.jpg"></center>
+
+<h2 id="HashMap-int-float"><a href="#HashMap-int-float" class="headerlink" title="HashMap(int, float)"></a>HashMap(int, float)</h2><p>第一个参数是容量默认为16，第二个参数是负载因子默认是0.75。源码如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="title">HashMap</span><span class="params">(<span class="keyword">int</span> initialCapacity, <span class="keyword">float</span> loadFactor)</span> </span>&#123;</div><div class="line">	<span class="keyword">if</span> (initialCapacity &lt; <span class="number">0</span>)		<span class="comment">//初始化容量总不能小于0吧</span></div><div class="line">	    <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal initial capacity: "</span> +</div><div class="line">                          initialCapacity);</div><div class="line">	<span class="keyword">if</span> (initialCapacity &gt; MAXIMUM_CAPACITY)		<span class="comment">//最大值为1&lt;&lt;30</span></div><div class="line">		initialCapacity = MAXIMUM_CAPACITY;</div><div class="line">	<span class="keyword">if</span> (loadFactor &lt;= <span class="number">0</span> || Float.isNaN(loadFactor))</div><div class="line">		<span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"Illegal load factor: "</span> +</div><div class="line">                          loadFactor);</div><div class="line">	<span class="keyword">this</span>.loadFactor = loadFactor;</div><div class="line">	<span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>直接看 tableSizeFor(initialCapacity) 这个方法，由于 hashmap 的容量总是2的幂，所以这个方法就是找到大于等于 initialCapacity 的最小的2的幂</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Returns a power of two size for the given target capacity.</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">tableSizeFor</span><span class="params">(<span class="keyword">int</span> cap)</span> </span>&#123;		<span class="comment">//例如cap ＝ 10</span></div><div class="line">	<span class="keyword">int</span> n = cap - <span class="number">1</span>;</div><div class="line">    n |= n &gt;&gt;&gt; <span class="number">1</span>;	<span class="comment">//n = n|n无符号右移1位	1001|0100 = 1101</span></div><div class="line">    n |= n &gt;&gt;&gt; <span class="number">2</span>; 	<span class="comment">//n = n|n无符号右移2位	1101|0011 = 1111</span></div><div class="line">    n |= n &gt;&gt;&gt; <span class="number">4</span>;	<span class="comment">//n = n|n无符号右移2位	1111|0000 = 1111</span></div><div class="line">    n |= n &gt;&gt;&gt; <span class="number">8</span>;	<span class="comment">//n = n|n无符号右移2位	1111|0000 = 1111</span></div><div class="line">    n |= n &gt;&gt;&gt; <span class="number">16</span>;	<span class="comment">//n = n|n无符号右移2位	1111|0000 = 1111</span></div><div class="line">    <span class="keyword">return</span> (n &lt; <span class="number">0</span>) ? <span class="number">1</span> : (n &gt;= MAXIMUM_CAPACITY) ? MAXIMUM_CAPACITY : n + <span class="number">1</span>;	<span class="comment">//返回16</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>tableSizeFor 方法为什么这么设计呢， 我们假设假设n只有最高位是1后面低位全是0，和无符号右移1位相或，得到最高位、次高位是1，后面低位均是0。再与无符号右移2位相或，得到高四位是1后面均是0。下面同理，或上无符号右移4位，得到高8位是1。或上无符号右移8位，得到高16位为1。或上无符号右移16位，得到32位全是1。此时已经大于 MAXIMUM_CAPACITY 了，没必要继续了。返回 MAXIMUM_CAPACITY 即可。这是在cap &lt;= MAXIMUM_CAPACITY 最极致的情况了。</p>
+<p>tableSizeFor 方法返回值赋值给了 threshold ？为什么不是下面这样了</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">this</span>.threshold = tableSizeFor(initialCapacity) * <span class="keyword">this</span>.loadFactor;</div></pre></td></tr></table></figure>
+<p>在这个构造方法中并没有对 table 数组初始化，初始化是第一次 put 操作的时候进行的，到时候会对 threshold 重新进行计算，这个不用我们担心😓。</p>
+<h2 id="put-K-V"><a href="#put-K-V" class="headerlink" title="put(K, V)"></a>put(K, V)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">put</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">false</span>, <span class="keyword">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> <span class="title">hash</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> h;</div><div class="line">    <span class="keyword">return</span> (key == <span class="keyword">null</span>) ? <span class="number">0</span> : (h = key.hashCode()) ^ (h &gt;&gt;&gt; <span class="number">16</span>);	<span class="comment">//为了hash碰撞的概率</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Implements Map.put and related methods</span></div><div class="line"><span class="comment"> *</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> hash hash for key</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> key the key</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> value the value to put</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> onlyIfAbsent if true, don't change existing value</span></div><div class="line"><span class="comment"> * <span class="doctag">@param</span> evict if false, the table is in creation mode.</span></div><div class="line"><span class="comment"> * <span class="doctag">@return</span> previous value, or null if none</span></div><div class="line"><span class="comment"> */</span>	</div><div class="line"><span class="function"><span class="keyword">final</span> V <span class="title">putVal</span><span class="params">(<span class="keyword">int</span> hash, K key, V value, <span class="keyword">boolean</span> onlyIfAbsent,</span></span></div><div class="line"><span class="function"><span class="params">                   <span class="keyword">boolean</span> evict)</span> </span>&#123;</div><div class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; p; <span class="keyword">int</span> n, i;</div><div class="line">    <span class="keyword">if</span> ((tab = table) == <span class="keyword">null</span> || (n = tab.length) == <span class="number">0</span>)</div><div class="line">		<span class="comment">//第一次put操作的时候会resize,稍后再看</span></div><div class="line">        n = (tab = resize()).length;</div><div class="line">    <span class="comment">//当前index在数组中的位置的链表头节点空的话则直接创建一个新节点</span></div><div class="line">    <span class="keyword">if</span> ((p = tab[i = (n - <span class="number">1</span>) &amp; hash]) == <span class="keyword">null</span>)</div><div class="line">        tab[i] = newNode(hash, key, value, <span class="keyword">null</span>);</div><div class="line">    <span class="keyword">else</span> &#123;</div><div class="line">        Node&lt;K,V&gt; e; K k;</div><div class="line">        <span class="comment">//key相等且hash也相等，则是覆盖value操作</span></div><div class="line">        <span class="keyword">if</span> (p.hash == hash &amp;&amp;</div><div class="line">            ((k = p.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</div><div class="line">            e = p;</div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (p <span class="keyword">instanceof</span> TreeNode)		<span class="comment">//红黑树之后再说</span></div><div class="line">            e = ((TreeNode&lt;K,V&gt;)p).putTreeVal(<span class="keyword">this</span>, tab, hash, key, value);</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> binCount = <span class="number">0</span>; ; ++binCount) &#123;</div><div class="line">                <span class="keyword">if</span> ((e = p.next) == <span class="keyword">null</span>) &#123;		<span class="comment">//则在链表尾部插入一个新节点</span></div><div class="line">                    p.next = newNode(hash, key, value, <span class="keyword">null</span>);</div><div class="line">                    <span class="comment">//如果追加节点后，链表长度&gt;=8，则转化为红黑树</span></div><div class="line">                    <span class="keyword">if</span> (binCount &gt;= TREEIFY_THRESHOLD - <span class="number">1</span>) <span class="comment">// -1 for 1st</span></div><div class="line">                        treeifyBin(tab, hash);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">                <span class="comment">//遍历链表的过程中也可能存在hash和key都相等的情况</span></div><div class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</div><div class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</div><div class="line">                	<span class="keyword">break</span>;</div><div class="line">                <span class="comment">//把e赋给p就是让链表一步一步往下走</span></div><div class="line">                p = e;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//e不为null则代表将要被覆盖value的那个节点</span></div><div class="line">        <span class="keyword">if</span> (e != <span class="keyword">null</span>) &#123; <span class="comment">// existing mapping for key</span></div><div class="line">            V oldValue = e.value;</div><div class="line">            <span class="comment">// onlyIfAbsent为true的话则不改变已经存在的value(不包括null噢)</span></div><div class="line">            <span class="keyword">if</span> (!onlyIfAbsent || oldValue == <span class="keyword">null</span>)</div><div class="line">                e.value = value;</div><div class="line">            <span class="comment">//这个在linkedhashmap中实现</span></div><div class="line">            afterNodeAccess(e);</div><div class="line">            <span class="keyword">return</span> oldValue;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//这里代表插入了一个新的链表节点，修改modCount,返回null</span></div><div class="line">    ++modCount;</div><div class="line">    <span class="comment">//更新hashmap的size，并判断是否需要resize</span></div><div class="line">    <span class="keyword">if</span> (++size &gt; threshold)</div><div class="line">        resize();</div><div class="line">    afterNodeInsertion(evict);</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="resize"><a href="#resize" class="headerlink" title="resize( )"></a>resize( )</h2><p>这个方法会在初始化和 size 超过 threshold 的时候执行。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * Initializes or doubles table size.  If null, allocates in</span></div><div class="line"><span class="comment"> * accord with initial capacity target held in field threshold.</span></div><div class="line"><span class="comment"> * Otherwise, because we are using power-of-two expansion, the</span></div><div class="line"><span class="comment"> * elements from each bin must either stay at same index, or move</span></div><div class="line"><span class="comment"> * with a power of two offset in the new table.</span></div><div class="line"><span class="comment"> *</span></div><div class="line"><span class="comment"> * <span class="doctag">@return</span> the table</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="keyword">final</span> Node&lt;K,V&gt;[] resize() &#123;</div><div class="line">	Node&lt;K,V&gt;[] oldTab = table;</div><div class="line">    <span class="keyword">int</span> oldCap = (oldTab == <span class="keyword">null</span>) ? <span class="number">0</span> : oldTab.length;</div><div class="line">    <span class="comment">//在hashmap(int, float)构造方法中已经将 tableSizeFor 的返回值赋值给了 threshold</span></div><div class="line">    <span class="keyword">int</span> oldThr = threshold;</div><div class="line">    <span class="keyword">int</span> newCap, newThr = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> (oldCap &gt; <span class="number">0</span>) &#123;</div><div class="line">    	<span class="keyword">if</span> (oldCap &gt;= MAXIMUM_CAPACITY) &#123;</div><div class="line">            <span class="comment">//容量已达上限，则设置阈值是2的31次方-1，同时不再扩容</span></div><div class="line">        	threshold = Integer.MAX_VALUE;</div><div class="line">            <span class="keyword">return</span> oldTab;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//未达上限则扩容一倍</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> ((newCap = oldCap &lt;&lt; <span class="number">1</span>) &lt; MAXIMUM_CAPACITY &amp;&amp;</div><div class="line">        	oldCap &gt;= DEFAULT_INITIAL_CAPACITY)</div><div class="line">            newThr = oldThr &lt;&lt; <span class="number">1</span>; <span class="comment">// double threshold</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//用上面的 tableSizeFor 返回值作为初始容量</span></div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (oldThr &gt; <span class="number">0</span>) <span class="comment">// initial capacity was placed in threshold</span></div><div class="line">        newCap = oldThr;</div><div class="line">    <span class="comment">//代表是没有容量/阈值参数的情况</span></div><div class="line">    <span class="keyword">else</span> &#123;               <span class="comment">// zero initial threshold signifies using defaults</span></div><div class="line">        newCap = DEFAULT_INITIAL_CAPACITY;	<span class="comment">//16</span></div><div class="line">        newThr = (<span class="keyword">int</span>)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY);	<span class="comment">//0.75*16</span></div><div class="line">    &#125;</div><div class="line">    <span class="comment">//对应的是上面几行那个else if(oldThr &gt; 0)的情况</span></div><div class="line">    <span class="keyword">if</span> (newThr == <span class="number">0</span>) &#123;</div><div class="line">        <span class="keyword">float</span> ft = (<span class="keyword">float</span>)newCap * loadFactor;</div><div class="line">        <span class="comment">//对阀值越界情况修复为 Integer.MAX_VALUE</span></div><div class="line">        newThr = (newCap &lt; MAXIMUM_CAPACITY &amp;&amp; ft &lt; (<span class="keyword">float</span>)MAXIMUM_CAPACITY ?</div><div class="line">                  (<span class="keyword">int</span>)ft : Integer.MAX_VALUE);</div><div class="line">    &#125;</div><div class="line">    threshold = newThr;</div><div class="line">    <span class="meta">@SuppressWarnings</span>(&#123;<span class="string">"rawtypes"</span>,<span class="string">"unchecked"</span>&#125;)</div><div class="line">  	<span class="comment">//构造新的table数组</span></div><div class="line">    Node&lt;K,V&gt;[] newTab = (Node&lt;K,V&gt;[])<span class="keyword">new</span> Node[newCap];</div><div class="line">    table = newTab;</div><div class="line">    <span class="comment">//将扩容前哈希桶中的元素移到扩容后的哈希桶</span></div><div class="line">    <span class="keyword">if</span> (oldTab != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; oldCap; ++j) &#123;</div><div class="line">            Node&lt;K,V&gt; e;</div><div class="line">            <span class="keyword">if</span> ((e = oldTab[j]) != <span class="keyword">null</span>) &#123;</div><div class="line">                <span class="comment">//不能有了老婆忘了娘吧，这里给原来的置为null</span></div><div class="line">                oldTab[j] = <span class="keyword">null</span>;</div><div class="line">                <span class="keyword">if</span> (e.next == <span class="keyword">null</span>)</div><div class="line">                    <span class="comment">//要时刻记得index = hash &amp; (table.length-1)</span></div><div class="line">                    newTab[e.hash &amp; (newCap - <span class="number">1</span>)] = e;</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (e <span class="keyword">instanceof</span> TreeNode)</div><div class="line">                    ((TreeNode&lt;K,V&gt;)e).split(<span class="keyword">this</span>, newTab, j, oldCap);</div><div class="line">                <span class="comment">//当前链表上不止一个节点</span></div><div class="line">                <span class="keyword">else</span> &#123; <span class="comment">// preserve order</span></div><div class="line">                    <span class="comment">//因为扩容是翻倍的，所以原链表上的每个节点，在扩容后的哈希桶中，要么还在原来下标位（low位），要么在旧下标+旧容量(high位)</span></div><div class="line">                    <span class="comment">//low位头节点、尾节点</span></div><div class="line">                    Node&lt;K,V&gt; loHead = <span class="keyword">null</span>, loTail = <span class="keyword">null</span>;</div><div class="line">                    <span class="comment">//high位头节点、尾节点</span></div><div class="line">                    Node&lt;K,V&gt; hiHead = <span class="keyword">null</span>, hiTail = <span class="keyword">null</span>;</div><div class="line">                    Node&lt;K,V&gt; next;</div><div class="line">                    <span class="keyword">do</span> &#123;</div><div class="line">                        next = e.next;</div><div class="line">                        <span class="comment">//这里就很关键了，靠 e.hash &amp; oldCap 来区分low位还是high位，稍后详细说下</span></div><div class="line">                        <span class="keyword">if</span> ((e.hash &amp; oldCap) == <span class="number">0</span>) &#123;</div><div class="line">                            <span class="keyword">if</span> (loTail == <span class="keyword">null</span>)</div><div class="line">                                loHead = e;</div><div class="line">                            <span class="keyword">else</span></div><div class="line">                                loTail.next = e;</div><div class="line">                                loTail = e;</div><div class="line">                            &#125;</div><div class="line">                        <span class="keyword">else</span> &#123;</div><div class="line">                            <span class="keyword">if</span> (hiTail == <span class="keyword">null</span>)</div><div class="line">                                hiHead = e;</div><div class="line">                            <span class="keyword">else</span></div><div class="line">                                hiTail.next = e;</div><div class="line">                            hiTail = e;</div><div class="line">                        &#125;</div><div class="line">                    &#125; <span class="keyword">while</span> ((e = next) != <span class="keyword">null</span>);</div><div class="line">                    <span class="keyword">if</span> (loTail != <span class="keyword">null</span>) &#123;</div><div class="line">                        loTail.next = <span class="keyword">null</span>;</div><div class="line">                        newTab[j] = loHead;</div><div class="line">                    &#125;</div><div class="line">                    <span class="comment">//可以看出low位和high位差一个旧容量</span></div><div class="line">                    <span class="keyword">if</span> (hiTail != <span class="keyword">null</span>) &#123;</div><div class="line">                        hiTail.next = <span class="keyword">null</span>;</div><div class="line">                        newTab[j + oldCap] = hiHead;</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> newTab;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>简单说下上面怎么区分原来链表的节点是应该放在 low 位还是 high 位的，假设一个 key 的 hash 为 00001100，哈希桶的容量是16，也就是 00010000。那么 00001100 &amp; 00001111 ＝ 00001100，也就是角标为12的桶中，而另一个 key 的 hash 为00011100，00011100 &amp; 00001111 = 00001100，那么它也在角标为12的桶中。但是这两个 key 的 hash 分别和 00010000 相与，结果刚好差了一个旧容量的大小。也就是根据 key 的 hash 和旧容量为1的那位对应的是0还是1，是0的话就放在 low 位，是1就放在 high 位。</p>
+<h2 id="get-Object"><a href="#get-Object" class="headerlink" title="get(Object)"></a>get(Object)</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">get</span><span class="params">(Object key)</span> </span>&#123;</div><div class="line">    Node&lt;K,V&gt; e;</div><div class="line">    <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? <span class="keyword">null</span> : e.value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> Node&lt;K,V&gt; <span class="title">getNode</span><span class="params">(<span class="keyword">int</span> hash, Object key)</span> </span>&#123;</div><div class="line">    Node&lt;K,V&gt;[] tab; Node&lt;K,V&gt; first, e; <span class="keyword">int</span> n; K k;</div><div class="line">    <span class="keyword">if</span> ((tab = table) != <span class="keyword">null</span> &amp;&amp; (n = tab.length) &gt; <span class="number">0</span> &amp;&amp;</div><div class="line">        (first = tab[(n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</div><div class="line">        <span class="comment">//根据下标检查第一个节点是不是我们要找的</span></div><div class="line">        <span class="keyword">if</span> (first.hash == hash &amp;&amp; <span class="comment">// always check first node</span></div><div class="line">            ((k = first.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</div><div class="line">            <span class="keyword">return</span> first;</div><div class="line">        <span class="comment">//不是的话则遍历链表</span></div><div class="line">        <span class="keyword">if</span> ((e = first.next) != <span class="keyword">null</span>) &#123;</div><div class="line">            <span class="keyword">if</span> (first <span class="keyword">instanceof</span> TreeNode)</div><div class="line">                <span class="keyword">return</span> ((TreeNode&lt;K,V&gt;)first).getTreeNode(hash, key);</div><div class="line">            <span class="keyword">do</span> &#123;</div><div class="line">                <span class="keyword">if</span> (e.hash == hash &amp;&amp;</div><div class="line">                    ((k = e.key) == key || (key != <span class="keyword">null</span> &amp;&amp; key.equals(k))))</div><div class="line">                    <span class="keyword">return</span> e;</div><div class="line">            &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="红黑树相关方法"><a href="#红黑树相关方法" class="headerlink" title="红黑树相关方法"></a>红黑树相关方法</h2><p>红黑树相关知识网上有很多不错的讲解，推荐一个github地址，感兴趣可以去看一下，<a href="https://github.com/julycoding/The-Art-Of-Programming-By-July/blob/master/ebook/zh/03.01.md" target="_blank" rel="external">教你透彻了解红黑树</a></p>
+<p>先来 TreeNode 有什么属性吧</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">TreeNode&lt;K,V&gt; parent;  <span class="comment">// red-black tree links</span></div><div class="line">TreeNode&lt;K,V&gt; left;</div><div class="line">TreeNode&lt;K,V&gt; right;</div><div class="line">TreeNode&lt;K,V&gt; prev;    <span class="comment">// needed to unlink next upon deletion</span></div><div class="line"><span class="keyword">boolean</span> red;</div></pre></td></tr></table></figure>
+<p>记得之前在 putVal( ) 方法中，如果追加节点后链表长度&gt;=8就会转换为树。其中 treeifyBin(tab, hash) 方法如下</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">treeifyBin</span><span class="params">(Node&lt;K,V&gt;[] tab, <span class="keyword">int</span> hash)</span> </span>&#123;</div><div class="line">    <span class="keyword">int</span> n, index; Node&lt;K,V&gt; e;</div><div class="line">    <span class="keyword">if</span> (tab == <span class="keyword">null</span> || (n = tab.length) &lt; MIN_TREEIFY_CAPACITY)</div><div class="line">        resize();</div><div class="line">    <span class="keyword">else</span> <span class="keyword">if</span> ((e = tab[index = (n - <span class="number">1</span>) &amp; hash]) != <span class="keyword">null</span>) &#123;</div><div class="line">        TreeNode&lt;K,V&gt; hd = <span class="keyword">null</span>, tl = <span class="keyword">null</span>;</div><div class="line">        <span class="keyword">do</span> &#123;</div><div class="line">            <span class="comment">//根据e节点构建一个新的treeNode</span></div><div class="line">            TreeNode&lt;K,V&gt; p = replacementTreeNode(e, <span class="keyword">null</span>);</div><div class="line">            <span class="keyword">if</span> (tl == <span class="keyword">null</span>)</div><div class="line">                hd = p;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                p.prev = tl;</div><div class="line">                tl.next = p;</div><div class="line">            &#125;</div><div class="line">            tl = p;</div><div class="line">        &#125; <span class="keyword">while</span> ((e = e.next) != <span class="keyword">null</span>);</div><div class="line">        <span class="keyword">if</span> ((tab[index] = hd) != <span class="keyword">null</span>)</div><div class="line">            hd.treeify(tab);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>现在 hd 就是之前链表头节点转换成的 treeNode，它的 next 指向下一个 treeNode，并且这个 treeNode 的 prev  指向 hd，后面同理。然后来看下 hd.treeify(tab)</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">final</span> <span class="keyword">void</span> <span class="title">treeify</span><span class="params">(Node&lt;K,V&gt;[] tab)</span> </span>&#123;</div><div class="line">    TreeNode&lt;K,V&gt; root = <span class="keyword">null</span>;</div><div class="line">    <span class="keyword">for</span> (TreeNode&lt;K,V&gt; x = <span class="keyword">this</span>, next; x != <span class="keyword">null</span>; x = next) &#123;</div><div class="line">    next = (TreeNode&lt;K,V&gt;)x.next;</div><div class="line">        x.left = x.right = <span class="keyword">null</span>;</div><div class="line">        <span class="comment">//此处执行，就是把hd作为根节点，设置red为false</span></div><div class="line">        <span class="keyword">if</span> (root == <span class="keyword">null</span>) &#123;</div><div class="line">            x.parent = <span class="keyword">null</span>;</div><div class="line">            x.red = <span class="keyword">false</span>;</div><div class="line">            root = x;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            K k = x.key;</div><div class="line">            <span class="keyword">int</span> h = x.hash;</div><div class="line">            Class&lt;?&gt; kc = <span class="keyword">null</span>;</div><div class="line">            <span class="comment">//往树中插入当前节点</span></div><div class="line">            <span class="keyword">for</span> (TreeNode&lt;K,V&gt; p = root;;) &#123;</div><div class="line">                <span class="keyword">int</span> dir, ph;</div><div class="line">                K pk = p.key;</div><div class="line">                <span class="comment">//根据当前节点的hash与root的hash大小区别开</span></div><div class="line">                <span class="keyword">if</span> ((ph = p.hash) &gt; h)</div><div class="line">                    dir = -<span class="number">1</span>;</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> (ph &lt; h)</div><div class="line">                    dir = <span class="number">1</span>;</div><div class="line">                <span class="keyword">else</span> <span class="keyword">if</span> ((kc == <span class="keyword">null</span> &amp;&amp;</div><div class="line">                            <span class="comment">//hash相同则判断key是否实现了Comparable接口</span></div><div class="line">                            (kc = comparableClassFor(k)) == <span class="keyword">null</span>) ||</div><div class="line">                            <span class="comment">//实现了Comparable接口则直接比较</span></div><div class="line">                            (dir = compareComparables(kc, k, pk)) == <span class="number">0</span>)</div><div class="line">                    <span class="comment">//否则调用System.identityHashCode比较，这里就不研究了</span></div><div class="line">                    dir = tieBreakOrder(k, pk);</div><div class="line">                TreeNode&lt;K,V&gt; xp = p;</div><div class="line">                <span class="keyword">if</span> ((p = (dir &lt;= <span class="number">0</span>) ? p.left : p.right) == <span class="keyword">null</span>) &#123;</div><div class="line">                    <span class="comment">//把当前节点parent指向root</span></div><div class="line">                    x.parent = xp;</div><div class="line">                    <span class="comment">//如果dir&lt;=0，也就是当前节点的hash&lt;=root的hash，把root的left指向当前节点</span></div><div class="line">                    <span class="keyword">if</span> (dir &lt;= <span class="number">0</span>)</div><div class="line">                        xp.left = x;</div><div class="line">                    <span class="comment">//如果dir&gt;0，也就是当前节点的hash&gt;root的hash，把root的right指向当前节点</span></div><div class="line">                    <span class="keyword">else</span></div><div class="line">                        xp.right = x;</div><div class="line">                    <span class="comment">//此处进行插入平衡操作，重新指定root，稍后再说</span></div><div class="line">                    root = balanceInsertion(root, x);</div><div class="line">                    <span class="keyword">break</span>;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="comment">//恢复root的位置，即起点作为根节点</span></div><div class="line">    moveRootToFront(tab, root);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>接着看下 balanceInsertion(root, x)怎么重新指定root的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">static</span> &lt;K,V&gt; <span class="function">TreeNode&lt;K,V&gt; <span class="title">balanceInsertion</span><span class="params">(TreeNode&lt;K,V&gt; root,</span></span></div><div class="line"><span class="function"><span class="params">                                                    TreeNode&lt;K,V&gt; x)</span> </span>&#123;</div><div class="line">    x.red = <span class="keyword">true</span>;</div><div class="line">    <span class="keyword">for</span> (TreeNode&lt;K,V&gt; xp, xpp, xppl, xppr;;) &#123;</div><div class="line">        <span class="comment">//如果当前节点父节点为null，则令其为黑色，直接返回当前节点</span></div><div class="line">        <span class="keyword">if</span> ((xp = x.parent) == <span class="keyword">null</span>) &#123;</div><div class="line">            x.red = <span class="keyword">false</span>;</div><div class="line">            <span class="keyword">return</span> x;</div><div class="line">        &#125;</div><div class="line">        <span class="comment">//如果当前节点父节点为黑色，或者祖父节点为null，直接返回root</span></div><div class="line">        <span class="keyword">else</span> <span class="keyword">if</span> (!xp.red || (xpp = xp.parent) == <span class="keyword">null</span>)</div><div class="line">            <span class="keyword">return</span> root;</div><div class="line">        <span class="comment">//如果当前节点的父节点是祖父节点的左孩子</span></div><div class="line">        <span class="keyword">if</span> (xp == (xppl = xpp.left)) &#123;</div><div class="line">            <span class="comment">//如果当前节点的祖父节点的右孩子不为null并且为红色，则令其为黑色</span></div><div class="line">            <span class="comment">//并且令父节点为黑色，令祖父节点为红色，把祖父节点设置为当前节点</span></div><div class="line">            <span class="keyword">if</span> ((xppr = xpp.right) != <span class="keyword">null</span> &amp;&amp; xppr.red) &#123;</div><div class="line">                xppr.red = <span class="keyword">false</span>;</div><div class="line">                xp.red = <span class="keyword">false</span>;</div><div class="line">                xpp.red = <span class="keyword">true</span>;</div><div class="line">                x = xpp;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                <span class="comment">//如果当前节点是父节点的右孩子</span></div><div class="line">                <span class="keyword">if</span> (x == xp.right) &#123;</div><div class="line">                    <span class="comment">//左旋</span></div><div class="line">                    root = rotateLeft(root, x = xp);</div><div class="line">                    xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</div><div class="line">                    xp.red = <span class="keyword">false</span>;</div><div class="line">                    <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</div><div class="line">                        xpp.red = <span class="keyword">true</span>;</div><div class="line">                        <span class="comment">//右旋</span></div><div class="line">                        root = rotateRight(root, xpp);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">else</span> &#123;</div><div class="line">            <span class="comment">//祖父节点左孩子不为null且为红色</span></div><div class="line">            <span class="keyword">if</span> (xppl != <span class="keyword">null</span> &amp;&amp; xppl.red) &#123;</div><div class="line">                xppl.red = <span class="keyword">false</span>;</div><div class="line">                xp.red = <span class="keyword">false</span>;</div><div class="line">                xpp.red = <span class="keyword">true</span>;</div><div class="line">                x = xpp;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">else</span> &#123;</div><div class="line">                <span class="keyword">if</span> (x == xp.left) &#123;</div><div class="line">                    root = rotateRight(root, x = xp);</div><div class="line">                    xpp = (xp = x.parent) == <span class="keyword">null</span> ? <span class="keyword">null</span> : xp.parent;</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (xp != <span class="keyword">null</span>) &#123;</div><div class="line">                    xp.red = <span class="keyword">false</span>;</div><div class="line">                    <span class="keyword">if</span> (xpp != <span class="keyword">null</span>) &#123;</div><div class="line">                        xpp.red = <span class="keyword">true</span>;</div><div class="line">                        root = rotateLeft(root, xpp);</div><div class="line">                    &#125;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>上面这个方法看不懂的话主要还是红黑树没有理解。建议先理解下红黑树。移除修复操作大同小异，这里就不做记录了。</p>
+<h2 id="其他新增方法"><a href="#其他新增方法" class="headerlink" title="其他新增方法"></a>其他新增方法</h2><ul>
+<li><p>带有默认值的get</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">getOrDefault</span><span class="params">(Object key, V defaultValue)</span> </span>&#123;</div><div class="line">    Node&lt;K,V&gt; e;</div><div class="line">    <span class="keyword">return</span> (e = getNode(hash(key), key)) == <span class="keyword">null</span> ? defaultValue : e.value;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>存在则不覆盖的put，调用putVal( )</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> V <span class="title">putIfAbsent</span><span class="params">(K key, V value)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> putVal(hash(key), key, value, <span class="keyword">true</span>, <span class="keyword">true</span>);</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+<li><p>根据key和value移除</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">remove</span><span class="params">(Object key, Object value)</span> </span>&#123;</div><div class="line">    <span class="keyword">return</span> removeNode(hash(key), key, value, <span class="keyword">true</span>, <span class="keyword">true</span>) != <span class="keyword">null</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>还有一些其它的方法没有说到，感兴趣的可以去看下源码。</p>
+
+      
+    </div>
+    
+  </div>
+  
+    
+    <div class="copyright">
+        <p><span>本文标题:</span><a href="/2017/08/20/HashMap/">JAVA8的HashMap</a></p>
+        <p><span>文章作者:</span><a href="/" title="回到主页">Lollipop</a></p>
+        <p><span>发布时间:</span>2017-08-20, 21:35:54</p>
+        <p><span>最后更新:</span>2017-08-23, 00:17:59</p>
+        <p>
+            <span>原始链接:</span><a class="post-url" href="/2017/08/20/HashMap/" title="JAVA8的HashMap">http://yoursite.com/2017/08/20/HashMap/</a>
+            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/08/20/HashMap/　　作者: Lollipop" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
+            <script> var clipboard = new Clipboard('.copy-path'); </script>
+        </p>
+        <p>
+            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
+        </p>
+    </div>
+
+
+
+    <nav id="article-nav">
+        
+        
+            <div id="article-nav-older" class="article-nav-title">
+                <a href="/2017/06/10/SpringMVC-container/">
+                    SpringMVC容器
+                </a>
+            </div>
+        
+    </nav>
+
+  
+</article>
+
+    <div id="toc" class="toc-article">
+        <strong class="toc-title">文章目录</strong>
+        
+            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-number">1.</span> <span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#底层实现简介"><span class="toc-number">2.</span> <span class="toc-text">底层实现简介</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#HashMap-int-float"><span class="toc-number">3.</span> <span class="toc-text">HashMap(int, float)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#put-K-V"><span class="toc-number">4.</span> <span class="toc-text">put(K, V)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#resize"><span class="toc-number">5.</span> <span class="toc-text">resize( )</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#get-Object"><span class="toc-number">6.</span> <span class="toc-text">get(Object)</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#红黑树相关方法"><span class="toc-number">7.</span> <span class="toc-text">红黑树相关方法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#其他新增方法"><span class="toc-number">8.</span> <span class="toc-text">其他新增方法</span></a></li></ol>
+        
+    </div>
+    <style>
+        .left-col .switch-btn,
+        .left-col .switch-area {
+            display: none;
+        }
+        .toc-level-3 i,
+        .toc-level-3 ol {
+            display: none !important;
+        }
+    </style>
+
+    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
+
+    <script>
+        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
+    </script>
+
+
+
+    
+<div class="share">
+    
+        <div class="bdsharebuttonbox">
+            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
+            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
+            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
+            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
+            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
+            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
+        </div>
+        <script>
+            window._bd_share_config={
+                "common":{"bdSnsKey":{},"bdText":"JAVA8的HashMap　| 小白爬坑之旅　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?'];
+        </script>
+    
+
+    
+</div>
+
+
+
+
+
+
+
+    
+        <section id="comments">
+    <style> aside.comment-bar { margin: auto 30px; }</style>
+    <div id="disqus_thread"></div>
+    <script>
+        var disqus_config = function(){
+            this.page.url = 'http://yoursite.com/2017/08/20/HashMap/';
+            this.page.identifier = '2017/08/20/HashMap/';
+        };
+        var loadComment = function(){
+            var d = document, s = d.createElement('script');
+            s.src = '//jimmy2angel.disqus.com/embed.js';
+            s.setAttribute('data-timestamp', +new Date());
+            (d.head || d.body).appendChild(s);
+        }
+    </script>
+    
+    <aside class="comment-bar">
+        <a href="javascript:void(0);">
+            <i class="fa fa-commenting-o animated infinite pulse"></i>
+            <i class="fa fa-spinner fa-pulse"></i>
+            <span class="count-comment"></span>
+        </a>
+    </aside>
+    <script>
+        var $commentBar = $("#comments aside.comment-bar");
+        var load$hide = function(){
+            $commentBar.find("a > i").toggle();
+            loadComment();
+            $commentBar.fadeOut(800);
+        }
+        $commentBar.click(function(){
+            load$hide();
+        })
+        $commentBar.children("a").hover(function(){
+            load$hide();
+        })
+        if (window.location.hash === "#comments") {
+            load$hide();
+        }
+    </script>
+
+</section>
+
+
+    <script id="dsq-count-scr" src="//jimmy2angel.disqus.com/count.js" async></script>
+    <span class="disqus-comment-count" data-disqus-identifier="2017/08/20/HashMap/"></span>
+    <span class="disqus-comment-count" data-disqus-url="http://yoursite.com/2017/08/20/HashMap/"></span>
+    <script>
+        $(".disqus-comment-count").hide();
+        var $disqusCount = $(".disqus-comment-count");
+        $disqusCount.bind("DOMNodeInserted", function(e) {
+            $(".count-comment").text(
+                $(this).text().replace(/[^0-9]/ig,"")
+            )
+            DISQUSWIDGETS.getCount({reset: true});
+        })
+    </script>
+
+    
+
+
+
+
+    <div class="scroll" id="post-nav-button">
+        
+            <a href="/" title="回到主页"><i class="fa fa-home"></i></a>
+        
+
+        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
+
+        
+            <a href="/2017/06/10/SpringMVC-container/" title="下一篇: SpringMVC容器">
+                <i class="fa fa-angle-right"></i>
+            </a>
+        
+    </div>
+
+    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/HashMap/">JAVA8的HashMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/10/SpringMVC-container/">SpringMVC容器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/31/SpringIOC/">Spring容器那点事</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/14/linux-deploy/">虚拟机设置固定IP及部署java项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/DecorateAndProxy/">装饰模式 和 代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/22/mybatis-mapper/">源码解析mapper接口代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/Design-Patterns-Proxy/">代理模式及动态代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/hexo+github pages/">Hexo+Github Pages写博客</a></li></ul>
+
+
+
+
+    <script>
+        
+    </script>
+</div>
+      <footer id="footer">
+    <div class="outer">
+        <div id="footer-info">
+            <div class="footer-left">
+                <i class="fa fa-copyright"></i> 
+                2017 Lollipop
+            </div>
+            <div class="footer-right">
+                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
+            </div>
+        </div>
+        
+            <div class="visit">
+                
+                    <span id="busuanzi_container_site_pv" style='display:none'>
+                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
+                        </span>
+                    </span>
+                
+                
+                    <span>| </span>
+                
+                
+                    <span id="busuanzi_container_page_pv" style='display:none'>
+                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
+                        </span>
+                    </span>
+                
+            </div>
+        
+    </div>
+</footer>
+    </div>
+    
+<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            var iPad = window.navigator.userAgent.indexOf('iPad');
+            if (iPad > -1 || $(".left-col").css("display") === "none") {
+                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
+                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
+                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
+            }
+            else {
+                var backgroundnum = 5;
+                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
+                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
+            }
+        })
+    </script>
+
+
+
+
+
+    <script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+        processEscapes: true,
+        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+    }
+});
+
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += ' has-jax';                 
+    }       
+});
+</script>
+
+<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+
+<div class="scroll" id="scroll">
+    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
+    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
+    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
+</div>
+<script>
+    // Open in New Window
+    
+        var oOpenInNew = {
+            
+            
+            
+            
+            
+            
+             archives: ".archive-article-title", 
+             miniArchives: "a.post-list-link", 
+            
+             friends: "#js-friends a", 
+             socail: ".social a" 
+        }
+        for (var x in oOpenInNew) {
+            $(oOpenInNew[x]).attr("target", "_blank");
+        }
+    
+</script>
+
+    <script>
+        var originTitle = document.title;
+        var titleTime;
+        document.addEventListener("visibilitychange", function() {
+            if (document.hidden) {
+                document.title = "(*´∇｀*)出错啦！点我看看" + originTitle;
+                clearTimeout(titleTime);
+            }
+            else {
+                document.title = "" + originTitle;
+                titleTime = setTimeout(function() {
+                    document.title = originTitle;
+                }, 2000);
+            }
+        })
+    </script>
+
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
+</script>
+  </div>
+</body>
+</html>
