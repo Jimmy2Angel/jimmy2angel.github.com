@@ -15,18 +15,18 @@
 
 
 
-<meta name="description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta name="description" content="前言回想之前几次的面试，没有一次不问到  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
 <meta name="keywords" content="collection,java8">
 <meta property="og:type" content="article">
 <meta property="og:title" content="JAVA8的HashMap">
 <meta property="og:url" content="http://yoursite.com/2017/08/20/HashMap/index.html">
 <meta property="og:site_name" content="小白爬坑之旅">
-<meta property="og:description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta property="og:description" content="前言回想之前几次的面试，没有一次不问到  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
 <meta property="og:image" content="http://yoursite.com/img/HashMap/hashmap.jpg">
-<meta property="og:updated_time" content="2017-08-22T16:17:59.000Z">
+<meta property="og:updated_time" content="2017-08-22T16:39:44.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="JAVA8的HashMap">
-<meta name="twitter:description" content="前言回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
+<meta name="twitter:description" content="前言回想之前几次的面试，没有一次不问到  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。">
 <meta name="twitter:image" content="http://yoursite.com/img/HashMap/hashmap.jpg">
 
 <link rel="apple-touch-icon" href= "/apple-touch-icon.png">
@@ -303,7 +303,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>回想之前几次的面试，没有一次不问道  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。<a id="more"></a></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>回想之前几次的面试，没有一次不问到  hashmap 的，这也体现了 hashmap 的重要性了。记得当时的回答是底层是数组加链表的方式实现的，然后就是什么 get 时候怎么查找的。现在想想这些小白都知道的东西说出来也加不了分啊。现在挤点时间出来看看源码吧。<a id="more"></a></p>
 <h2 id="底层实现简介"><a href="#底层实现简介" class="headerlink" title="底层实现简介"></a>底层实现简介</h2><p>数组加链表这个没什么好说的，看下面这个图就能明白了(java8当中当链表达到一定长度就会转换成红黑树，这个之后再说)。还是从源码来看吧，这里时间问题不可能每个方法都拿出来讲了，挑几个重要的方法来说。</p>
 <center><img src="/img/HashMap/hashmap.jpg"></center>
 
@@ -356,7 +356,7 @@
         <p><span>本文标题:</span><a href="/2017/08/20/HashMap/">JAVA8的HashMap</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Lollipop</a></p>
         <p><span>发布时间:</span>2017-08-20, 21:35:54</p>
-        <p><span>最后更新:</span>2017-08-23, 00:17:59</p>
+        <p><span>最后更新:</span>2017-08-23, 00:39:44</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2017/08/20/HashMap/" title="JAVA8的HashMap">http://yoursite.com/2017/08/20/HashMap/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/08/20/HashMap/　　作者: Lollipop" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
