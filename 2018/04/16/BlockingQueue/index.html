@@ -16,13 +16,13 @@
 
 
 <meta name="description" content="首先先介绍一下 Queue、AbstractQueue等接口和类。">
-<meta name="keywords" content="collection,queue">
+<meta name="keywords" content="并发包,queue">
 <meta property="og:type" content="article">
 <meta property="og:title" content="BlockingQueue">
 <meta property="og:url" content="http://yoursite.com/2018/04/16/BlockingQueue/index.html">
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="首先先介绍一下 Queue、AbstractQueue等接口和类。">
-<meta property="og:updated_time" content="2018-04-17T15:24:46.000Z">
+<meta property="og:updated_time" content="2018-04-27T14:23:17.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BlockingQueue">
 <meta name="twitter:description" content="首先先介绍一下 Queue、AbstractQueue等接口和类。">
@@ -182,7 +182,7 @@
                 
                 <section class="switch-part switch-part2">
                     <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IOC/">IOC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/collection/">collection</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8/">java8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/queue/">queue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/set/">set</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/容器/">容器</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具使用/">工具使用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li></ul>
+                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/IOC/">IOC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8/">java8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/queue/">queue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/set/">set</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具使用/">工具使用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发包/">并发包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合类/">集合类</a></li></ul>
                     </div>
                 </section>
                 
@@ -291,7 +291,7 @@
 
         
     <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/collection/">collection</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/queue/">queue</a></li></ul>
+        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/queue/">queue</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/并发包/">并发包</a></li></ul>
     </div>
 
         <div class="clearfix"></div>
@@ -305,18 +305,15 @@
 <h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><p>该接口针对添加元素、移除元素、获取第一个元素各有两个方法：</p>
 <ol>
 <li>添加元素：<ul>
-<li>add(E e)        当队列为满时前者会抛出 IllegalStateException</li>
-<li>offer(E e)    当队列为满时前者会返回 false</li>
+<li>add(E e)        当队列为满时前者会抛出 IllegalStateException<br>   offer(E e)    当队列为满时前者会返回 false</li>
 </ul>
 </li>
 <li>移除元素<ul>
-<li>remove(E e)    当队列为空时前者会抛出 NoSuchElementException</li>
-<li>poll(E e)        当队列为空时前者会返回 null</li>
+<li>remove(E e)    当队列为空时前者会抛出 NoSuchElementException<br>   poll(E e)        当队列为空时前者会返回 null</li>
 </ul>
 </li>
 <li>获取第一个元素：<ul>
-<li>element( )    当队列为空时前者会抛出 NoSuchElementException</li>
-<li>peek( )    当队列为空时前者会返回 null</li>
+<li>element( )    当队列为空时前者会抛出 NoSuchElementException<br>   peek( )    当队列为空时前者会返回 null</li>
 </ul>
 </li>
 </ol>
@@ -397,7 +394,7 @@
         <p><span>本文标题:</span><a href="/2018/04/16/BlockingQueue/">BlockingQueue</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Lollipop</a></p>
         <p><span>发布时间:</span>2018-04-16, 22:11:20</p>
-        <p><span>最后更新:</span>2018-04-17, 23:24:46</p>
+        <p><span>最后更新:</span>2018-04-27, 22:23:17</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/04/16/BlockingQueue/" title="BlockingQueue">http://yoursite.com/2018/04/16/BlockingQueue/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/04/16/BlockingQueue/　　作者: Lollipop" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
