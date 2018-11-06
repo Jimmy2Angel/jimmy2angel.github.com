@@ -22,7 +22,7 @@
 <meta property="og:url" content="http://yoursite.com/2018/10/27/SpringBoot源码解析二/index.html">
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="前言要说 SpringBoot 有什么优点的话，比较核心的就是简化配置和自动配置了。前面我们分析了 SpringBoot 的启动流程还有一些监听器相关的源码，今天来分析下 SpringBoot 的自动配置具体怎么实现的，以便日后遇到相关错误知道从哪里入手。">
-<meta property="og:updated_time" content="2018-11-05T06:53:06.000Z">
+<meta property="og:updated_time" content="2018-11-06T12:39:04.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="SpringBoot源码解析二">
 <meta name="twitter:description" content="前言要说 SpringBoot 有什么优点的话，比较核心的就是简化配置和自动配置了。前面我们分析了 SpringBoot 的启动流程还有一些监听器相关的源码，今天来分析下 SpringBoot 的自动配置具体怎么实现的，以便日后遇到相关错误知道从哪里入手。">
@@ -301,7 +301,7 @@
     <div class="article-entry" itemprop="articleBody">
       
           
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要说 SpringBoot 有什么优点的话，比较核心的就是简化配置和自动配置了。前面我们分析了 SpringBoot 的启动流程还有一些监听器相关的源码，<br>今天来分析下 SpringBoot 的自动配置具体怎么实现的，以便日后遇到相关错误知道从哪里入手。<a id="more"></a></p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>要说 SpringBoot 有什么优点的话，比较核心的就是简化配置和自动配置了。前面我们分析了 SpringBoot 的启动流程还有一些监听器相关的源码，今天来分析下 SpringBoot 的自动配置具体怎么实现的，以便日后遇到相关错误知道从哪里入手。<a id="more"></a></p>
 <h2 id="自动化配置报错"><a href="#自动化配置报错" class="headerlink" title="自动化配置报错"></a>自动化配置报错</h2><p>初学 SpringBoot 的我们在启动自己的第一个 SpringBoot demo 的时候，可能都遇到了以下这个报错：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Description:</div><div class="line"> </div><div class="line">Failed to configure a DataSource: &apos;url&apos; attribute is not specified and no embedded datasource could be configured.</div><div class="line"> </div><div class="line">Reason: Failed to determine a suitable driver class</div><div class="line"> </div><div class="line"> </div><div class="line">Action:</div><div class="line"> </div><div class="line">Consider the following:</div><div class="line">	If you want an embedded database (H2, HSQL or Derby), please put it on the classpath.</div><div class="line">	If you have database settings to be loaded from a particular profile you may need to activate it (no profiles are currently active).</div></pre></td></tr></table></figure></p>
 <p>日志意思很明显是配置 datasource 的时候出错了，我们都没有配置 datasource 呢怎么就报错了。当时心想什么垃圾 SpringBoot！网上搜索以下，在启动类上添加一个注解：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@EnableAutoConfiguration</span>(exclude = DataSourceAutoConfiguration.class)</div></pre></td></tr></table></figure></p>
 <p>或者去掉 pom 文件中的一个依赖：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">dependency</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.springframework.boot<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></div><div class="line">    <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>spring-boot-starter-jdbc<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></div><div class="line"><span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></div></pre></td></tr></table></figure></p>
@@ -361,7 +361,7 @@
         <p><span>本文标题:</span><a href="/2018/10/27/SpringBoot源码解析二/">SpringBoot源码解析二</a></p>
         <p><span>文章作者:</span><a href="/" title="回到主页">Lollipop</a></p>
         <p><span>发布时间:</span>2018-10-27, 14:49:08</p>
-        <p><span>最后更新:</span>2018-11-05, 14:53:06</p>
+        <p><span>最后更新:</span>2018-11-06, 20:39:04</p>
         <p>
             <span>原始链接:</span><a class="post-url" href="/2018/10/27/SpringBoot源码解析二/" title="SpringBoot源码解析二">http://yoursite.com/2018/10/27/SpringBoot源码解析二/</a>
             <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2018/10/27/SpringBoot源码解析二/　　作者: Lollipop" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
