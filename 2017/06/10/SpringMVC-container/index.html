@@ -1,27 +1,103 @@
-<!DOCTYPE html>
-<html >
-<head>
+<!doctype html>
 
-    <!--[if lt IE 9]>
-        <style>body {display: none; background: none !important} </style>
-        <meta http-equiv="Refresh" Content="0; url=//outdatedbrowser.com/" />
-    <![endif]-->
 
-<meta charset="utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge, chrome=1" />
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<meta name="format-detection" content="telephone=no" />
-<meta name="author" content="Lollipop" />
+
+  
+
+
+<html class="theme-next mist use-motion" lang="">
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform">
+<meta http-equiv="Cache-Control" content="no-siteapp">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css">
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css">
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
+
+
+  <meta name="keywords" content="SpringMVC,Spring,">
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/apple-touch-icon.png?v=5.1.1">
+
+
+
 
 
 
 <meta name="description" content="SpringMVC容器之前分析了过 Spring 的启动过程了，今天看下 SpringMVC 的启动。一样的，我们先看下 web.xml，SpringMVC 是以 Servlet 配置出现的">
-<meta name="keywords" content="Spring,SpringMVC">
+<meta name="keywords" content="SpringMVC,Spring">
 <meta property="og:type" content="article">
 <meta property="og:title" content="SpringMVC容器">
 <meta property="og:url" content="http://yoursite.com/2017/06/10/SpringMVC-container/index.html">
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="SpringMVC容器之前分析了过 Spring 的启动过程了，今天看下 SpringMVC 的启动。一样的，我们先看下 web.xml，SpringMVC 是以 Servlet 配置出现的">
+<meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/img/SpringMVC/DispatcherServletClass.png">
 <meta property="og:image" content="http://yoursite.com/img/SpringMVC/initWebApplicationContext1.png">
 <meta property="og:image" content="http://yoursite.com/img/SpringMVC/initWebApplicationContext2.png">
@@ -33,290 +109,270 @@
 <meta name="twitter:description" content="SpringMVC容器之前分析了过 Spring 的启动过程了，今天看下 SpringMVC 的启动。一样的，我们先看下 web.xml，SpringMVC 是以 Servlet 配置出现的">
 <meta name="twitter:image" content="http://yoursite.com/img/SpringMVC/DispatcherServletClass.png">
 
-<link rel="apple-touch-icon" href= "/apple-touch-icon.png">
 
 
-    <link rel="alternate" href="/atom.xml" title="小白爬坑之旅" type="application/atom+xml">
-
-
-
-    <link rel="shortcut icon" href="/apple-touch-icon.png">
-
-
-
-    <link href="//cdn.bootcss.com/animate.css/3.5.1/animate.min.css" rel="stylesheet">
-
-
-
-    <link href="//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.css" rel="stylesheet">
-
-
-
-    <script src="//cdn.bootcss.com/pace/1.0.2/pace.min.js"></script>
-    <link href="//cdn.bootcss.com/pace/1.0.2/themes/blue/pace-theme-minimal.css" rel="stylesheet">
-
-
-<link rel="stylesheet" href="/css/style.css">
-
-
-
-<link href="//cdn.bootcss.com/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet">
-
-
-<title>SpringMVC容器 | 小白爬坑之旅</title>
-
-<script src="//cdn.bootcss.com/jquery/2.2.4/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/clipboard.js/1.5.10/clipboard.min.js"></script>
-
-<script>
-    var yiliaConfig = {
-        fancybox: true,
-        animate: true,
-        isHome: false,
-        isPost: true,
-        isArchive: false,
-        isTag: false,
-        isCategory: false,
-        fancybox_js: "//cdn.bootcss.com/fancybox/2.1.5/jquery.fancybox.min.js",
-        scrollreveal: "//cdn.bootcss.com/scrollReveal.js/3.1.4/scrollreveal.min.js",
-        search: undefined
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
     }
+  };
 </script>
 
 
-    <script> yiliaConfig.jquery_ui = [false]; </script>
 
-
-
-    <script> yiliaConfig.rootUrl = "\/";</script>
-
+  <link rel="canonical" href="http://yoursite.com/2017/06/10/SpringMVC-container/">
 
 
 
 
 
+  <title>SpringMVC容器 | 小白爬坑之旅</title>
 </head>
-<body>
-  <div id="container">
-    <div class="left-col">
-    <div class="overlay"></div>
-<div class="intrude-less">
-    <header id="header" class="inner">
-        <a href="/" class="profilepic">
-            <img src="/img/AcFun.png" class="animated zoomIn">
-        </a>
-        <hgroup>
-          <h1 class="header-author"><a href="/">Lollipop</a></h1>
-        </hgroup>
 
-        
+<body itemscope="" itemtype="http://schema.org/WebPage" lang="default">
 
-        
+  
 
 
-        
-            <div id="switch-btn" class="switch-btn">
-                <div class="icon">
-                    <div class="icon-ctn">
-                        <div class="icon-wrap icon-house" data-idx="0">
-                            <div class="birdhouse"></div>
-                            <div class="birdhouse_holes"></div>
-                        </div>
-                        <div class="icon-wrap icon-ribbon hide" data-idx="1">
-                            <div class="ribbon"></div>
-                        </div>
-                        
-                        <div class="icon-wrap icon-link hide" data-idx="2">
-                            <div class="loopback_l"></div>
-                            <div class="loopback_r"></div>
-                        </div>
-                        
-                        
-                        <div class="icon-wrap icon-me hide" data-idx="3">
-                            <div class="user"></div>
-                            <div class="shoulder"></div>
-                        </div>
-                        
-                    </div>
-                    
-                </div>
-                <div class="tips-box hide">
-                    <div class="tips-arrow"></div>
-                    <ul class="tips-inner">
-                        <li>菜单</li>
-                        <li>标签</li>
-                        
-                        <li>友情链接</li>
-                        
-                        
-                        <li>关于我</li>
-                        
-                    </ul>
-                </div>
-            </div>
-        
 
-        <div id="switch-area" class="switch-area">
-            <div class="switch-wrap">
-                <section class="switch-part switch-part1">
-                    <nav class="header-menu">
-                        <ul>
-                        
-                            <li><a href="/">主页</a></li>
-                        
-                            <li><a href="/archives/">所有文章</a></li>
-                        
-                            <li><a href="/tags/">标签云</a></li>
-                        
-                            <li><a href="/about/">关于我</a></li>
-                        
-                        </ul>
-                    </nav>
-                    <nav class="header-nav">
-                        <ul class="social">
-                            
-                                <a class="fa Email" href="mailto:a1334416010@gmail.com" title="Email"></a>
-                            
-                                <a class="fa GitHub" href="https://github.com/Jimmy2Angel" title="GitHub"></a>
-                            
-                                <a class="fa 网易云音乐" href="http://music.163.com/#/user/home?id=44324803" title="网易云音乐"></a>
-                            
-                        </ul>
-                    </nav>
-                </section>
-                
-                
-                <section class="switch-part switch-part2">
-                    <div class="widget tagcloud" id="js-tagcloud">
-                        <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/JVM/">JVM</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SkyWalking/">SkyWalking</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Spring/">Spring</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringBoot/">SpringBoot</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/String/">String</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Thread/">Thread</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/java8/">java8</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/linux/">linux</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/mybatis/">mybatis</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/queue/">queue</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/set/">set</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/代理/">代理</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/工具使用/">工具使用</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/并发包/">并发包</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/设计模式/">设计模式</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/集合类/">集合类</a></li></ul>
-                    </div>
-                </section>
-                
-                
-                
-                <section class="switch-part switch-part3">
-                    <div id="js-friends">
-                    
-                      <a class="main-nav-link switch-friends-link" href="https://hexo.io">Hexo</a>
-                    
-                      <a class="main-nav-link switch-friends-link" href="https://pages.github.com/">GitHub</a>
-                    
-                      <a class="main-nav-link switch-friends-link" href="http://moxfive.xyz/">MOxFIVE</a>
-                    
-                    </div>
-                </section>
-                
 
-                
-                
-                <section class="switch-part switch-part4">
-                
-                    <div id="js-aboutme">小白爬坑中。。。</div>
-                </section>
-                
-            </div>
-        </div>
-    </header>                
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope="" itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">小白爬坑之旅</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
 </div>
-    </div>
-    <div class="mid-col">
-      <nav id="mobile-nav">
-      <div class="overlay">
-          <div class="slider-trigger"></div>
-          <h1 class="header-author js-mobile-header hide"><a href="/" title="回到主页">Lollipop</a></h1>
-      </div>
-    <div class="intrude-less">
-        <header id="header" class="inner">
-            <a href="/" class="profilepic">
-                <img src="/img/AcFun.png" class="animated zoomIn">
-            </a>
-            <hgroup>
-              <h1 class="header-author"><a href="/" title="回到主页">Lollipop</a></h1>
-            </hgroup>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
             
-            <nav class="header-menu">
-                <ul>
-                
-                    <li><a href="/">主页</a></li>
-                
-                    <li><a href="/archives/">所有文章</a></li>
-                
-                    <li><a href="/tags/">标签云</a></li>
-                
-                    <li><a href="/about/">关于我</a></li>
-                
-                <div class="clearfix"></div>
-                </ul>
-            </nav>
-            <nav class="header-nav">
-                        <ul class="social">
-                            
-                                <a class="fa Email" target="_blank" href="mailto:a1334416010@gmail.com" title="Email"></a>
-                            
-                                <a class="fa GitHub" target="_blank" href="https://github.com/Jimmy2Angel" title="GitHub"></a>
-                            
-                                <a class="fa 网易云音乐" target="_blank" href="http://music.163.com/#/user/home?id=44324803" title="网易云音乐"></a>
-                            
-                        </ul>
-            </nav>
-        </header>                
-    </div>
-    <link class="menu-list" tags="标签" friends="友情链接" about="关于我"/>
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br>
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br>
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br>
+            
+            Archives
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br>
+            
+            Tags
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
 </nav>
-      <div class="body-wrap"><article id="post-SpringMVC-container" class="article article-type-post" itemscope itemprop="blogPost">
-  
-    <div class="article-meta">
-      <a href="/2017/06/10/SpringMVC-container/" class="article-date">
-      <time datetime="2017-06-10T05:12:19.000Z" itemprop="datePublished">2017-06-10</time>
-</a>
 
 
-    </div>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
   
-  <div class="article-inner">
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/10/SpringMVC-container/">
+
+    <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lollipop">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/AcFun.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope="" itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="小白爬坑之旅">
+    </span>
+
     
-      <input type="hidden" class="isFancy" />
-    
-    
-      <header class="article-header">
+      <header class="post-header">
+
         
-  
-    <h1 class="article-title" itemprop="name">
-      SpringMVC容器
-    </h1>
-  
-
-      </header>
-      
-      <div class="article-info article-info-post">
         
-    <div class="article-category tagcloud">
-    <a class="article-category-link" href="/categories/SpringMVC/">SpringMVC</a>
-    </div>
-
-
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                SpringMVC容器
+              
+            
+          </h1>
         
-    <div class="article-tag tagcloud">
-        <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spring/">Spring</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SpringMVC/">SpringMVC</a></li></ul>
-    </div>
 
-        <div class="clearfix"></div>
-      </div>
-      
-    
-    <div class="article-entry" itemprop="articleBody">
-      
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-06-10T13:12:19+08:00">
+                2017-06-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
           
+            <span class="post-category">
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope="" itemtype="http://schema.org/Thing">
+                  <a href="/categories/SpringMVC/" itemprop="url" rel="index">
+                    <span itemprop="name">SpringMVC</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
         <h2 id="SpringMVC容器"><a href="#SpringMVC容器" class="headerlink" title="SpringMVC容器"></a>SpringMVC容器</h2><p>之前分析了过 Spring 的启动过程了，今天看下 SpringMVC 的启动。一样的，我们先看下 web.xml，SpringMVC 是以 Servlet 配置出现的<a id="more"></a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div></pre></td><td class="code"><pre><div class="line">&lt;context-param&gt;</div><div class="line">    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">    &lt;param-value&gt;</div><div class="line">      classpath:spring-application.xml</div><div class="line">    &lt;/param-value&gt;</div><div class="line">  &lt;/context-param&gt;</div><div class="line"></div><div class="line">  &lt;listener&gt;</div><div class="line">    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</div><div class="line">  &lt;/listener&gt;</div><div class="line"></div><div class="line">&lt;servlet&gt;</div><div class="line">	&lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;</div><div class="line">	&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</div><div class="line">	&lt;init-param&gt;</div><div class="line">	  &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</div><div class="line">	  &lt;param-value&gt;classpath:spring-mvc.xml&lt;/param-value&gt;</div><div class="line">	&lt;/init-param&gt;</div><div class="line">	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</div><div class="line">&lt;/servlet&gt;</div><div class="line">&lt;servlet-mapping&gt;</div><div class="line">	&lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;</div><div class="line">	&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</div><div class="line">&lt;/servlet-mapping&gt;</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">&lt;context-param&gt;</span><br><span class="line">    &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</span><br><span class="line">    &lt;param-value&gt;</span><br><span class="line">      classpath:spring-application.xml</span><br><span class="line">    &lt;/param-value&gt;</span><br><span class="line">  &lt;/context-param&gt;</span><br><span class="line"></span><br><span class="line">  &lt;listener&gt;</span><br><span class="line">    &lt;listener-class&gt;org.springframework.web.context.ContextLoaderListener&lt;/listener-class&gt;</span><br><span class="line">  &lt;/listener&gt;</span><br><span class="line"></span><br><span class="line">&lt;servlet&gt;</span><br><span class="line">	&lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;</span><br><span class="line">	&lt;servlet-class&gt;org.springframework.web.servlet.DispatcherServlet&lt;/servlet-class&gt;</span><br><span class="line">	&lt;init-param&gt;</span><br><span class="line">	  &lt;param-name&gt;contextConfigLocation&lt;/param-name&gt;</span><br><span class="line">	  &lt;param-value&gt;classpath:spring-mvc.xml&lt;/param-value&gt;</span><br><span class="line">	&lt;/init-param&gt;</span><br><span class="line">	&lt;load-on-startup&gt;1&lt;/load-on-startup&gt;</span><br><span class="line">&lt;/servlet&gt;</span><br><span class="line">&lt;servlet-mapping&gt;</span><br><span class="line">	&lt;servlet-name&gt;DispatcherServlet&lt;/servlet-name&gt;</span><br><span class="line">	&lt;url-pattern&gt;*.do&lt;/url-pattern&gt;</span><br><span class="line">&lt;/servlet-mapping&gt;</span><br></pre></td></tr></table></figure>
 <p>之前分析了 ContextLoaderListener，实例化 IoC 容器，并将此容器实例注册到 ServletContext 中。我们先看下 DispatcherServlet 的类图及继承关系：</p>
 <div align="center"><br><img src="/img/SpringMVC/DispatcherServletClass.png"><br></div>
 
 <p>SpringMVC最核心的类就是 DispatcherServlet， 关于 Spring Context 的配置文件加载和创建是在 init() 方法中进行的，主要的调用顺序是 init–&gt;initServletBean–&gt;initWebApplicationContext 。 先来看一下 initWebApplicationContext 的实现：FrameworkServlet.java </p>
 <div align="center"><br><img src="/img/SpringMVC/initWebApplicationContext1.png"><br><img src="/img/SpringMVC/initWebApplicationContext2.png"><br></div>
 
-<p>先简单说下这些代码的功能：<br>514行：从 ServletContext 中获取 rootContext也就是SpringIOC容器<br>517行：如果一个 context 的实例被注入了，直接使用<br>538行：从 ServletContext 中获取 webApplicationContext也就是SpringMVC容器<br>543行：创建 SpringMVC 的容器，并将 rootContext 作为父容器<br>550行：刷新上下文（执行组件的初始化），这个方法由子类DispatchServlet的方法实现<br>556行：将 SpringMVC 容器作为属性设置进 ServletContext<br>这里多说一句，SpringMVC 容器在 ServletContext 中的属性名:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">public String getServletContextAttributeName() &#123;</div><div class="line">	return SERVLET_CONTEXT_PREFIX + getServletName();</div><div class="line">&#125;</div><div class="line"></div><div class="line">public static final String SERVLET_CONTEXT_PREFIX = FrameworkServlet.class.getName() + &quot;.CONTEXT.&quot;;</div></pre></td></tr></table></figure></p>
-<p>而 SpringIOC 容器在 ServletContext 中的属性名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">String ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE = WebApplicationContext.class.getName() + &quot;.ROOT&quot;;</div></pre></td></tr></table></figure></p>
+<p>先简单说下这些代码的功能：<br>514行：从 ServletContext 中获取 rootContext也就是SpringIOC容器<br>517行：如果一个 context 的实例被注入了，直接使用<br>538行：从 ServletContext 中获取 webApplicationContext也就是SpringMVC容器<br>543行：创建 SpringMVC 的容器，并将 rootContext 作为父容器<br>550行：刷新上下文（执行组件的初始化），这个方法由子类DispatchServlet的方法实现<br>556行：将 SpringMVC 容器作为属性设置进 ServletContext<br>这里多说一句，SpringMVC 容器在 ServletContext 中的属性名:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public String getServletContextAttributeName() &#123;</span><br><span class="line">	return SERVLET_CONTEXT_PREFIX + getServletName();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">public static final String SERVLET_CONTEXT_PREFIX = FrameworkServlet.class.getName() + &quot;.CONTEXT.&quot;;</span><br></pre></td></tr></table></figure></p>
+<p>而 SpringIOC 容器在 ServletContext 中的属性名：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">String ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE = WebApplicationContext.class.getName() + &quot;.ROOT&quot;;</span><br></pre></td></tr></table></figure></p>
 <p>前面的没什么好说的，我们看下 onRefresh() 方法，调用了 initStrategies() 方法：</p>
 <div align="center"><br><img src="/img/SpringMVC/DispatcherServlet-onRefresh.png"><br></div>
 
@@ -326,319 +382,393 @@
 <p>detectAllHandlerMappings 默认为 true，从当前的 SpringMVC 容器及其父容器中查找所有的 HandlerMappings，否则只从当前的  SpringMVC 容器中查找 HandlerMapping，如果没有找到 handlerMappings，设置默认的 handlerMapping，默认值设置在  DispatcherServlet 同级目录的 DispatcherServlet.properties 中。</p>
 <h3 id="多说一句"><a href="#多说一句" class="headerlink" title="多说一句"></a>多说一句</h3><p>上面的 findWebApplicationContext()，createWebApplicationContext(rootContext) 之类的方法点进去看看也很容易懂，我就不贴源码了，然后 createWebApplicationContext 中会层层调用直到 AbstractApplicationContext的 refresh 方法来初始化 bean，这个方法在之前分析 Spring 启动的时候看过，这里也就不看了。</p>
 <p>还是那句话，以我现在水平分析源码并不指望能看懂并理解每一句每一行，但是看不懂的方法你就点进去看看，万一里面里面的东西你看过呢是不是，就怕看不懂然后觉得这行代码不重要就不看了。</p>
-<p>嗯？说完了？怎么感觉看完之前的<a href="https://jimmy2angel.github.io/2017/05/31/SpringIOC/" target="_blank" rel="external">Spring容器那点事</a>，再看这个好像也没什么了。我们再来简单说下 Spring 容器和 SpringMVC 容器的py(手动滑稽)关系。</p>
+<p>嗯？说完了？怎么感觉看完之前的<a href="https://jimmy2angel.github.io/2017/05/31/SpringIOC/" target="_blank" rel="noopener">Spring容器那点事</a>，再看这个好像也没什么了。我们再来简单说下 Spring 容器和 SpringMVC 容器的py(手动滑稽)关系。</p>
 <h2 id="Spring容器-和-SpringMVC容器的关系"><a href="#Spring容器-和-SpringMVC容器的关系" class="headerlink" title="Spring容器 和 SpringMVC容器的关系"></a>Spring容器 和 SpringMVC容器的关系</h2><p>ContextLoaderListener 中创建 ApplicationContext（SpringIOC容器）主要用于整个 Web 应用程序需要共享的一些组件 ，比如 DAO，数据库的 ConnectionFactory 等。而由 DispatcherServlet 创建的 ApplicationContext（SpringMVC容器）主要用于和该 Servlet 相关的一些组件 ，比如 Controller、ViewResovler 等。</p>
-<p>对于作用范围而言， 在 DispatcherServlet 中可以引用由 ContextLoaderListener 所创建的 ApplicationContext ，而反过来不行。<br>在 Spring 的具体实现上，这两个 ApplicationContext 都是通过 ServletContext 的 setAttribute 方法放到 ServletContext 中的。但是， ContextLoaderListener 会先于 DispatcherServlet 创建 ApplicationContext，DispatcherServlet 在创建 ApplicationContext 时会先找到由 ContextLoaderListener 所创建的 ApplicationContext，再将后者的 ApplicationContext 作为参数传给 DispatcherServlet 的 ApplicationContext 的 setParent() 方法，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wac.setParent(parent);</div></pre></td></tr></table></figure></p>
+<p>对于作用范围而言， 在 DispatcherServlet 中可以引用由 ContextLoaderListener 所创建的 ApplicationContext ，而反过来不行。<br>在 Spring 的具体实现上，这两个 ApplicationContext 都是通过 ServletContext 的 setAttribute 方法放到 ServletContext 中的。但是， ContextLoaderListener 会先于 DispatcherServlet 创建 ApplicationContext，DispatcherServlet 在创建 ApplicationContext 时会先找到由 ContextLoaderListener 所创建的 ApplicationContext，再将后者的 ApplicationContext 作为参数传给 DispatcherServlet 的 ApplicationContext 的 setParent() 方法，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wac.setParent(parent);</span><br></pre></td></tr></table></figure></p>
 <p>其中， wac 即为由 DisptcherServlet 创建的 ApplicationContext，而 parent 则为 ContextLoaderListener 创建的ApplicationContext 。此后，框架又会调用 ServletContext 的 setAttribute() 方法将 wac 加入到 ServletContext 中。</p>
 <p>当 Spring 在执行 ApplicationContext 的 getBean 时， 如果在自己 context 中找不到对应的 bean，则会在父容器中去找 。这也解释了为什么我们可以在 DispatcherServlet 中获取到由 ContextLoaderListener 对应的 ApplicationContext 中的 bean。举个例子就是，你可以在 controller 层中注入 service 层的 bean。</p>
 
       
     </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/SpringMVC/" rel="tag"># SpringMVC</a>
+          
+            <a href="/tags/Spring/" rel="tag"># Spring</a>
+          
+        </div>
+      
+
+      
+        
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/31/SpringIOC/" rel="next" title="Spring容器那点事">
+                <i class="fa fa-chevron-left"></i> Spring容器那点事
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/20/HashMap/" rel="prev" title="JAVA8的HashMap">
+                JAVA8的HashMap <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
     
   </div>
-  
-    
-    <div class="copyright">
-        <p><span>本文标题:</span><a href="/2017/06/10/SpringMVC-container/">SpringMVC容器</a></p>
-        <p><span>文章作者:</span><a href="/" title="回到主页">Lollipop</a></p>
-        <p><span>发布时间:</span>2017-06-10, 13:12:19</p>
-        <p><span>最后更新:</span>2018-11-24, 13:19:29</p>
-        <p>
-            <span>原始链接:</span><a class="post-url" href="/2017/06/10/SpringMVC-container/" title="SpringMVC容器">http://yoursite.com/2017/06/10/SpringMVC-container/</a>
-            <span class="copy-path" data-clipboard-text="原文: http://yoursite.com/2017/06/10/SpringMVC-container/　　作者: Lollipop" title="点击复制文章链接"><i class="fa fa-clipboard"></i></span>
-            <script> var clipboard = new Clipboard('.copy-path'); </script>
-        </p>
-        <p>
-            <span>许可协议:</span><i class="fa fa-creative-commons"></i> <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" title="CC BY-NC-SA 4.0 International" target = "_blank">"署名-非商用-相同方式共享 4.0"</a> 转载请保留原文链接及作者。
-        </p>
-    </div>
 
 
-
-    <nav id="article-nav">
-        
-            <div id="article-nav-newer" class="article-nav-title">
-                <a href="/2017/08/20/HashMap/">
-                    JAVA8的HashMap
-                </a>
-            </div>
-        
-        
-            <div id="article-nav-older" class="article-nav-title">
-                <a href="/2017/05/31/SpringIOC/">
-                    Spring容器那点事
-                </a>
-            </div>
-        
-    </nav>
-
-  
-</article>
-
-    <div id="toc" class="toc-article">
-        <strong class="toc-title">文章目录</strong>
-        
-            <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#SpringMVC容器"><span class="toc-number">1.</span> <span class="toc-text">SpringMVC容器</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#多说一句"><span class="toc-number">1.1.</span> <span class="toc-text">多说一句</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Spring容器-和-SpringMVC容器的关系"><span class="toc-number">2.</span> <span class="toc-text">Spring容器 和 SpringMVC容器的关系</span></a></li></ol>
-        
-    </div>
-    <style>
-        .left-col .switch-btn,
-        .left-col .switch-area {
-            display: none;
-        }
-        .toc-level-3 i,
-        .toc-level-3 ol {
-            display: none !important;
-        }
-    </style>
-
-    <input type="button" id="tocButton" value="隐藏目录"  title="点击按钮隐藏或者显示文章目录">
-
-    <script>
-        yiliaConfig.toc = ["隐藏目录", "显示目录", !!"false"];
-    </script>
-
-
-
-    
-<div class="share">
-    
-        <div class="bdsharebuttonbox">
-            <a href="#" class="fa fa-twitter bds_twi" data-cmd="twi" title="分享到推特"></a>
-            <a href="#" class="fa fa-weibo bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
-            <a href="#" class="fa fa-qq bds_sqq" data-cmd="sqq" title="分享给 QQ 好友"></a>
-            <a href="#" class="fa fa-files-o bds_copy" data-cmd="copy" title="复制网址"></a>
-            <a href="#" class="fa fa fa-envelope-o bds_mail" data-cmd="mail" title="通过邮件分享"></a>
-            <a href="#" class="fa fa-weixin bds_weixin" data-cmd="weixin" title="生成文章二维码"></a>
-            <a href="#" class="fa fa-share-alt bds_more" data-cmd="more"></i></a>
-        </div>
-        <script>
-            window._bd_share_config={
-                "common":{"bdSnsKey":{},"bdText":"SpringMVC容器　| 小白爬坑之旅　","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"0","bdSize":"24"},"share":{}};with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='/static/api/js/share.js?v=89860593.js?'];
-        </script>
-    
-
-    
-</div>
-
-
-
-
-
-
-
-    
-        <section id="comments">
-    <style> aside.comment-bar { margin: auto 30px; }</style>
-    <div id="disqus_thread"></div>
-    <script>
-        var disqus_config = function(){
-            this.page.url = 'http://yoursite.com/2017/06/10/SpringMVC-container/';
-            this.page.identifier = '2017/06/10/SpringMVC-container/';
-        };
-        var loadComment = function(){
-            var d = document, s = d.createElement('script');
-            s.src = '//jimmy2angel.disqus.com/embed.js';
-            s.setAttribute('data-timestamp', +new Date());
-            (d.head || d.body).appendChild(s);
-        }
-    </script>
-    
-    <aside class="comment-bar">
-        <a href="javascript:void(0);">
-            <i class="fa fa-commenting-o animated infinite pulse"></i>
-            <i class="fa fa-spinner fa-pulse"></i>
-            <span class="count-comment"></span>
-        </a>
-    </aside>
-    <script>
-        var $commentBar = $("#comments aside.comment-bar");
-        var load$hide = function(){
-            $commentBar.find("a > i").toggle();
-            loadComment();
-            $commentBar.fadeOut(800);
-        }
-        $commentBar.click(function(){
-            load$hide();
-        })
-        $commentBar.children("a").hover(function(){
-            load$hide();
-        })
-        if (window.location.hash === "#comments") {
-            load$hide();
-        }
-    </script>
-
-</section>
-
-
-    <script id="dsq-count-scr" src="//jimmy2angel.disqus.com/count.js" async></script>
-    <span class="disqus-comment-count" data-disqus-identifier="2017/06/10/SpringMVC-container/"></span>
-    <span class="disqus-comment-count" data-disqus-url="http://yoursite.com/2017/06/10/SpringMVC-container/"></span>
-    <script>
-        $(".disqus-comment-count").hide();
-        var $disqusCount = $(".disqus-comment-count");
-        $disqusCount.bind("DOMNodeInserted", function(e) {
-            $(".count-comment").text(
-                $(this).text().replace(/[^0-9]/ig,"")
-            )
-            DISQUSWIDGETS.getCount({reset: true});
-        })
-    </script>
-
-    
-
-
-
-
-    <div class="scroll" id="post-nav-button">
-        
-            <a href="/2017/08/20/HashMap/" title="上一篇: JAVA8的HashMap">
-                <i class="fa fa-angle-left"></i>
-            </a>
-        
-
-        <a title="文章列表"><i class="fa fa-bars"></i><i class="fa fa-times"></i></a>
-
-        
-            <a href="/2017/05/31/SpringIOC/" title="下一篇: Spring容器那点事">
-                <i class="fa fa-angle-right"></i>
-            </a>
-        
-    </div>
-
-    <ul class="post-list"><li class="post-list-item"><a class="post-list-link" href="/2018/11/27/SkyWalking-Collector源码浅析/">SkyWalking Collector源码浅析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/26/SkyWalking-Agent源码浅析/">SkyWalking Agent源码浅析</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/11/21/SkyWalking使用指南/">Apache SkyWalking 使用指南</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/27/SpringBoot源码解析二/">SpringBoot源码解析二</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/26/ConstantPool/">常量池及字符串对象的创建</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/10/09/SpringBoot源码解析一/">SpringBoot源码解析一</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/27/ThreadPoolExecutor/">ThreadPoolExecutor</a></li><li class="post-list-item"><a class="post-list-link" href="/2018/04/16/BlockingQueue/">BlockingQueue</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/09/ExecutionEngine-md/">《深入理解Java虚拟机》之 字节码执行引擎</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/07/ClassLoading/">《深入理解Java虚拟机》之 类加载机制</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/05/MemoryAllocationAndGC/">《深入理解Java虚拟机》之GC</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/11/02/JVM-MemoryArea/">《深入理解Java虚拟机》之Java内存区域</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/31/HashSet和TreeSet/">HashSet 和 TreeSet</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/08/20/HashMap/">JAVA8的HashMap</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/06/10/SpringMVC-container/">SpringMVC容器</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/31/SpringIOC/">Spring容器那点事</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/05/14/linux-deploy/">虚拟机设置固定IP及部署java项目</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/25/DecorateAndProxy/">装饰模式 和 代理模式</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/22/mybatis-mapper/">源码解析mapper接口代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/Design-Patterns-Proxy/">代理模式及动态代理</a></li><li class="post-list-item"><a class="post-list-link" href="/2017/04/18/hexo+github pages/">Hexo+Github Pages写博客</a></li></ul>
-
-
-
-
-    <script>
-        
-    </script>
-</div>
-      <footer id="footer">
-    <div class="outer">
-        <div id="footer-info">
-            <div class="footer-left">
-                <i class="fa fa-copyright"></i> 
-                2017-2018 Lollipop
-            </div>
-            <div class="footer-right">
-                <a href="http://hexo.io/" target="_blank" title="快速、简洁且高效的博客框架">Hexo</a>  Theme <a href="https://github.com/MOxFIVE/hexo-theme-yelee" target="_blank" title="简而不减 Hexo 双栏博客主题  v3.5">Yelee</a> by MOxFIVE <i class="fa fa-heart animated infinite pulse"></i>
-            </div>
         </div>
         
-            <div class="visit">
-                
-                    <span id="busuanzi_container_site_pv" style='display:none'>
-                        <span id="site-visit" title="本站到访数"><i class="fa fa-user" aria-hidden="true"></i><span id="busuanzi_value_site_uv"></span>
-                        </span>
-                    </span>
-                
-                
-                    <span>| </span>
-                
-                
-                    <span id="busuanzi_container_page_pv" style='display:none'>
-                        <span id="page-visit"  title="本页阅读量"><i class="fa fa-eye animated infinite pulse" aria-hidden="true"></i><span id="busuanzi_value_page_pv"></span>
-                        </span>
-                    </span>
-                
-            </div>
-        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
     </div>
-</footer>
-    </div>
-    
-<script data-main="/js/main.js" src="//cdn.bootcss.com/require.js/2.2.0/require.min.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            var iPad = window.navigator.userAgent.indexOf('iPad');
-            if (iPad > -1 || $(".left-col").css("display") === "none") {
-                var bgColorList = ["#9db3f4", "#414141", "#e5a859", "#f5dfc6", "#c084a0", "#847e72", "#cd8390", "#996731"];
-                var bgColor = Math.ceil(Math.random() * (bgColorList.length - 1));
-                $("body").css({"background-color": bgColorList[bgColor], "background-size": "cover"});
-            }
-            else {
-                var backgroundnum = 5;
-                var backgroundimg = "url(/background/bg-x.jpg)".replace(/x/gi, Math.ceil(Math.random() * backgroundnum));
-                $("body").css({"background": backgroundimg, "background-attachment": "fixed", "background-size": "cover"});
-            }
-        })
-    </script>
-
-
-
-
-
-    <script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-    tex2jax: {
-        inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-        processEscapes: true,
-        skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-    }
-});
-
-MathJax.Hub.Queue(function() {
-    var all = MathJax.Hub.getAllJax(), i;
-    for(i=0; i < all.length; i += 1) {
-        all[i].SourceElement().parentNode.className += ' has-jax';                 
-    }       
-});
-</script>
-
-<script src="//cdn.bootcss.com/mathjax/2.6.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-<div class="scroll" id="scroll">
-    <a href="#" title="返回顶部"><i class="fa fa-arrow-up"></i></a>
-    <a href="#comments" onclick="load$hide();" title="查看评论"><i class="fa fa-comments-o"></i></a>
-    <a href="#footer" title="转到底部"><i class="fa fa-arrow-down"></i></a>
-</div>
-<script>
-    // Open in New Window
-    
-        var oOpenInNew = {
-            
-            
-            
-            
-            
-            
-             archives: ".archive-article-title", 
-             miniArchives: "a.post-list-link", 
-            
-             friends: "#js-friends a", 
-             socail: ".social a" 
-        }
-        for (var x in oOpenInNew) {
-            $(oOpenInNew[x]).attr("target", "_blank");
-        }
-    
-</script>
-
-    <script>
-        var originTitle = document.title;
-        var titleTime;
-        document.addEventListener("visibilitychange", function() {
-            if (document.hidden) {
-                document.title = "(*´∇｀*)出错啦！点我看看" + originTitle;
-                clearTimeout(titleTime);
-            }
-            else {
-                document.title = "" + originTitle;
-                titleTime = setTimeout(function() {
-                    document.title = originTitle;
-                }, 2000);
-            }
-        })
-    </script>
-
-<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js">
-</script>
   </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope="" itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image" src="/images/AcFun.png" alt="Lollipop">
+          <p class="site-author-name" itemprop="name">Lollipop</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">22</span>
+                <span class="site-state-item-name">posts</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-name">categories</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">19</span>
+                <span class="site-state-item-name">tags</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/Jimmy2Angel" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="mailto:a1334416010@gmail.com" target="_blank" title="Email">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  Email
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#SpringMVC容器"><span class="nav-number">1.</span> <span class="nav-text">SpringMVC容器</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#多说一句"><span class="nav-number">1.1.</span> <span class="nav-text">多说一句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Spring容器-和-SpringMVC容器的关系"><span class="nav-number">2.</span> <span class="nav-text">Spring容器 和 SpringMVC容器的关系</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">
+  
+  &copy;  2017 - 
+  <span itemprop="copyrightYear">2019</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lollipop</span>
+</div>
+
+
+<div class="powered-by">
+  Powered by <a class="theme-link" href="https://hexo.io">Hexo</a>
+</div>
+
+<div class="theme-info">
+  Theme -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
 </body>
 </html>
