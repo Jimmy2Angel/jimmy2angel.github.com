@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="并发包,Thread,">
+  <meta name="keywords" content="并发编程,Thread,">
 
 
 
@@ -91,7 +91,7 @@
 
 
 <meta name="description" content="简介 对象的创建和销毁需要一定的开销，线程亦是对象，创建线程和销毁线程必然也需要同样的开销。 在某些情况下，线程执行的任务耗时不长，但是任务很多。这样就导致频繁的创建、销毁线程，需要很大的时间开销和资源开销。线程池应运而生。 线程池相当于在这一个池中维护多个线程，需要执行任务时从池中取出一个线程用来执行任务，任务执行完成后将线程放回池中。这样也就减少了开销。">
-<meta name="keywords" content="并发包,Thread">
+<meta name="keywords" content="并发编程,Thread">
 <meta property="og:type" content="article">
 <meta property="og:title" content="ThreadPoolExecutor">
 <meta property="og:url" content="http://yoursite.com/2018/04/27/ThreadPoolExecutor/index.html">
@@ -99,7 +99,7 @@
 <meta property="og:description" content="简介 对象的创建和销毁需要一定的开销，线程亦是对象，创建线程和销毁线程必然也需要同样的开销。 在某些情况下，线程执行的任务耗时不长，但是任务很多。这样就导致频繁的创建、销毁线程，需要很大的时间开销和资源开销。线程池应运而生。 线程池相当于在这一个池中维护多个线程，需要执行任务时从池中取出一个线程用来执行任务，任务执行完成后将线程放回池中。这样也就减少了开销。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="http://yoursite.com/img/ThreadPoolExecutor/ThreadPoolExecutor-runstate.png">
-<meta property="og:updated_time" content="2018-05-08T15:01:18.000Z">
+<meta property="og:updated_time" content="2019-03-22T05:44:01.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="ThreadPoolExecutor">
 <meta name="twitter:description" content="简介 对象的创建和销毁需要一定的开销，线程亦是对象，创建线程和销毁线程必然也需要同样的开销。 在某些情况下，线程执行的任务耗时不长，但是任务很多。这样就导致频繁的创建、销毁线程，需要很大的时间开销和资源开销。线程池应运而生。 线程池相当于在这一个池中维护多个线程，需要执行任务时从池中取出一个线程用来执行任务，任务执行完成后将线程放回池中。这样也就减少了开销。">
@@ -402,23 +402,27 @@
 <li><p>newCachedThreadPool()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                  <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newCachedThreadPool</span><span class="params">(ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">0</span>, Integer.MAX_VALUE,</span><br><span class="line">                                  <span class="number">60L</span>, TimeUnit.SECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> SynchronousQueue&lt;Runnable&gt;(),</span><br><span class="line">                                  threadFactory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>线程数量没有上界(Integer.MAX_VALUE)，有新任务提交并且没有空闲线程时，创建一个新线程执行该任务，每个线程空闲时间为 60s, 60s 空闲后线程会被移出缓存。使用 <code>SynchronousQueue</code> 作为任务队列的实现类。适用于执行大量生命周期短的异步任务。</p>
-<p>​</p>
 </li>
+</ol>
+<ol start="2">
 <li><p>newFixedThreadPool()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                  <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newFixedThreadPool</span><span class="params">(<span class="keyword">int</span> nThreads, ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ThreadPoolExecutor(nThreads, nThreads,</span><br><span class="line">                                  <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                  <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(),</span><br><span class="line">                                  threadFactory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>固定容量的线程池。使用 <code>LinkedBlockingQueue</code> 作为任务队列的实现类。当新任务到达时，创建新线程，当线程数达到上限时，将任务放到队列中，任务队列中任务数量没有上界。当线程创建之后就一直存在直至显式的调用 <code>shutdown()</code> 方法。</p>
-<p>​</p>
 </li>
+</ol>
+<ol start="3">
 <li><p>newSingleThreadExecutor()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">        (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">                                <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;()));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newSingleThreadExecutor</span><span class="params">(ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FinalizableDelegatedExecutorService</span><br><span class="line">        (<span class="keyword">new</span> ThreadPoolExecutor(<span class="number">1</span>, <span class="number">1</span>,</span><br><span class="line">                                <span class="number">0L</span>, TimeUnit.MILLISECONDS,</span><br><span class="line">                                <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;(),</span><br><span class="line">                                threadFactory));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>单个 Worker 的线程池。和 <code>newFixedThreadPool(1)</code> 类似，区别在于这个实例经过了一次封装，不能对该实例的参数进行重配置，并且实现了 <code>finalize()</code> 方法，能够在 GC 时调用 <code>shutdown()</code> 方法关闭该线程池。</p>
-<p>​</p>
 </li>
+</ol>
+<ol start="4">
 <li><p>newScheduledThreadPool()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(<span class="keyword">int</span> corePoolSize)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize);</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newScheduledThreadPool</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    	<span class="keyword">int</span> corePoolSize, ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ScheduledThreadPoolExecutor(corePoolSize, threadFactory);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>ScheduledThreadPoolExecutor 的功能主要有两点：在固定的时间点执行（也可以认为是延迟执行），重复执行。</p>
-<p>​</p>
 </li>
+</ol>
+<ol start="5">
 <li><p>newSingleThreadScheduledExecutor()</p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newSingleThreadScheduledExecutor</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DelegatedScheduledExecutorService</span><br><span class="line">        (<span class="keyword">new</span> ScheduledThreadPoolExecutor(<span class="number">1</span>));</span><br><span class="line">&#125;</span><br><span class="line"> </span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ScheduledExecutorService <span class="title">newSingleThreadScheduledExecutor</span><span class="params">(ThreadFactory threadFactory)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> DelegatedScheduledExecutorService</span><br><span class="line">        (<span class="keyword">new</span> ScheduledThreadPoolExecutor(<span class="number">1</span>, threadFactory));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 <p>将 ScheduledThreadPoolExecutor 进行一层包装。</p>
@@ -483,7 +487,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/并发包/" rel="tag"># 并发包</a>
+            <a href="/tags/并发编程/" rel="tag"># 并发编程</a>
           
             <a href="/tags/Thread/" rel="tag"># Thread</a>
           
@@ -580,7 +584,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">26</span>
+                <span class="site-state-item-count">27</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -602,7 +606,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">21</span>
+                <span class="site-state-item-count">22</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
