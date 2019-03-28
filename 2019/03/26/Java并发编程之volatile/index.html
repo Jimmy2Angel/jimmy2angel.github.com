@@ -90,18 +90,18 @@
 
 
 
-<meta name="description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。 v">
+<meta name="description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。">
 <meta name="keywords" content="并发编程,多线程">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Java并发编程之volatile">
 <meta property="og:url" content="http://yoursite.com/2019/03/26/Java并发编程之volatile/index.html">
 <meta property="og:site_name" content="小白爬坑之旅">
-<meta property="og:description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。 v">
+<meta property="og:description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-26T07:29:08.000Z">
+<meta property="og:updated_time" content="2019-03-26T08:08:11.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java并发编程之volatile">
-<meta name="twitter:description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。 v">
+<meta name="twitter:description" content="简介Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，因此在 volatile 能满足需求的时候不需要使用 synchronized。">
 
 
 
@@ -357,7 +357,7 @@
       
 
       
-        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。<br>所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，<br>因此在 volatile 能满足需求的时候不需要使用 synchronized。</p>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>Java 中如果一个变量被声明是 volatile 的，则一个线程对该变量的修改对其它线程是立即可见的。但是并不能保证基于该变量的操作的原子性。<br>所以 volatile 变量可以看成功能被削的 synchronized，但是与 synchronized 相比，使用 volatile 编码较少，且运行时开销也较少，<br>因此在 volatile 能满足需求的时候不需要使用 synchronized。<a id="more"></a></p>
 <p>volatile 的使用方式很简单，只要修饰一个能被多个线程访问的变量即可，下面是一个单例的代码：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton singleton;  </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">        <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">            <span class="keyword">synchronized</span> (Singleton.class) &#123;  </span><br><span class="line">                <span class="keyword">if</span> (singleton == <span class="keyword">null</span>) &#123;</span><br><span class="line">                    singleton = <span class="keyword">new</span> Singleton();  </span><br><span class="line">                &#125;</span><br><span class="line">            &#125;  </span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> singleton;  </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <h1 id="volatile-的原理"><a href="#volatile-的原理" class="headerlink" title="volatile 的原理"></a>volatile 的原理</h1><h2 id="Java-内存模型（JMM）"><a href="#Java-内存模型（JMM）" class="headerlink" title="Java 内存模型（JMM）"></a>Java 内存模型（JMM）</h2><p>JMM 规定了所有的变量的都是存储在 <code>主内存</code> 中的，每个线程都有自己的 <code>工作内存</code>，线程的 <code>工作内存</code> 中存储的是 <code>主内存</code> 中变量的<br>副本拷贝，线程对变量的操作只能发生在 <code>工作内存</code> 中，不能直接读写 <code>主内存</code>。不同线程之间无法访问对方的 <code>工作线程</code>，只能通过 <code>主内存</code> 的同步。 </p>
 <p>但是这样的话就可能发生线程A修改了某个变量但是线程B不知道的情况。（可见性问题）</p>
