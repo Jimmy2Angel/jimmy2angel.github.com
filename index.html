@@ -261,7 +261,7 @@
   
 
   <article class="post post-type-normal " itemscope="" itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/07/MySQL-Redo-Log/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/05/07/InnoDB-redo-log/">
 
     <span hidden itemprop="author" itemscope="" itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lollipop">
@@ -283,8 +283,8 @@
             
               
                 
-                <a class="post-title-link" href="/2019/05/07/MySQL-Redo-Log/" itemprop="url">
-                  MySQL Redo Log
+                <a class="post-title-link" href="/2019/05/07/InnoDB-redo-log/" itemprop="url">
+                  InnoDB redo log
                 </a>
               
             
@@ -361,7 +361,7 @@
           <p>MySQL 数据库对页中数据的修改都是在 Buffer Pool 中进行的，如果一个事务修改了 Buffer Pool 中的一个数据页，但是该数据页尚未刷新回磁盘，此时服务器挂了，Buffer Pool 中的数据修改就会丢失。<br>那么这个 <code>持久性</code> 怎么保证？MySQL 通过 redo log 来保证基于 Buffer Pool 的数据修改在服务器恢复后不会丢失，也就是会在事务执行期间将对数据库的修改通过 redo log 保存下来，待服务器恢复后通过重放该 redo log 达到数据不丢失的目的。
           <!--noindex-->
           <div class="post-button text-center">
-            <a class="btn" href="/2019/05/07/MySQL-Redo-Log/#more" rel="contents">
+            <a class="btn" href="/2019/05/07/InnoDB-redo-log/#more" rel="contents">
               Read more &raquo;
             </a>
           </div>
