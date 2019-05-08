@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="MySQL,">
+  <meta name="keywords" content="InnoDB,MySQL,">
 
 
 
@@ -91,7 +91,7 @@
 
 
 <meta name="description" content="MySQL 数据库对页中数据的修改都是在 Buffer Pool 中进行的，如果一个事务修改了 Buffer Pool 中的一个数据页，但是该数据页尚未刷新回磁盘，此时服务器挂了，Buffer Pool 中的数据修改就会丢失。那么这个 持久性 怎么保证？MySQL 通过 redo log 来保证基于 Buffer Pool 的数据修改在服务器恢复后不会丢失，也就是会在事务执行期间将对数据库的修改通">
-<meta name="keywords" content="MySQL">
+<meta name="keywords" content="InnoDB,MySQL">
 <meta property="og:type" content="article">
 <meta property="og:title" content="InnoDB redo log">
 <meta property="og:url" content="http://yoursite.com/2019/05/07/InnoDB-redo-log/index.html">
@@ -100,7 +100,7 @@
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g2srtr8ojlj30ti0f0aba.jpg">
 <meta property="og:image" content="https://ws3.sinaimg.cn/large/006tNc79gy1g2ss1w7zhvj30s20gfjt6.jpg">
-<meta property="og:updated_time" content="2019-05-07T10:50:59.000Z">
+<meta property="og:updated_time" content="2019-05-08T06:18:35.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="InnoDB redo log">
 <meta name="twitter:description" content="MySQL 数据库对页中数据的修改都是在 Buffer Pool 中进行的，如果一个事务修改了 Buffer Pool 中的一个数据页，但是该数据页尚未刷新回磁盘，此时服务器挂了，Buffer Pool 中的数据修改就会丢失。那么这个 持久性 怎么保证？MySQL 通过 redo log 来保证基于 Buffer Pool 的数据修改在服务器恢复后不会丢失，也就是会在事务执行期间将对数据库的修改通">
@@ -550,6 +550,8 @@
       
         <div class="post-tags">
           
+            <a href="/tags/InnoDB/" rel="tag"># InnoDB</a>
+          
             <a href="/tags/MySQL/" rel="tag"># MySQL</a>
           
         </div>
@@ -572,6 +574,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/05/07/InnoDB-undo-log/" rel="prev" title="InnoDB undo log">
+                InnoDB undo log <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -641,7 +647,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">30</span>
+                <span class="site-state-item-count">31</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
@@ -663,7 +669,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">24</span>
+                <span class="site-state-item-count">25</span>
                 <span class="site-state-item-name">tags</span>
               </a>
             </div>
