@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="首先先介绍一下 Queue、AbstractQueue等接口和类。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-03-22T05:43:39.000Z">
+<meta property="og:updated_time" content="2019-06-13T03:06:31.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="BlockingQueue">
 <meta name="twitter:description" content="首先先介绍一下 Queue、AbstractQueue等接口和类。">
@@ -361,15 +361,15 @@
 <h1 id="Queue"><a href="#Queue" class="headerlink" title="Queue"></a>Queue</h1><p>该接口针对添加元素、移除元素、获取第一个元素各有两个方法：</p>
 <ol>
 <li>添加元素：<ul>
-<li>add(E e)        当队列为满时前者会抛出 IllegalStateException<br>   offer(E e)    当队列为满时前者会返回 false</li>
+<li>add(E e)        当队列为满时会抛出 IllegalStateException<br>   offer(E e)    当队列为满时会返回 false</li>
 </ul>
 </li>
 <li>移除元素<ul>
-<li>remove(E e)    当队列为空时前者会抛出 NoSuchElementException<br>   poll(E e)        当队列为空时前者会返回 null</li>
+<li>remove(E e)    当队列为空时会抛出 NoSuchElementException<br>   poll(E e)        当队列为空时会返回 null</li>
 </ul>
 </li>
 <li>获取第一个元素：<ul>
-<li>element( )    当队列为空时前者会抛出 NoSuchElementException<br>   peek( )    当队列为空时前者会返回 null</li>
+<li>element( )    当队列为空时会抛出 NoSuchElementException<br>   peek( )    当队列为空时会返回 null</li>
 </ul>
 </li>
 </ol>

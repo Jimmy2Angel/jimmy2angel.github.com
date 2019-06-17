@@ -74,7 +74,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css">
 
 
-  <meta name="keywords" content="InnoDB,MySQL,">
+  <meta name="keywords" content="MySQL,InnoDB,">
 
 
 
@@ -91,7 +91,7 @@
 
 
 <meta name="description" content="MySQL 数据库对页中数据的修改都是在 Buffer Pool 中进行的，如果一个事务修改了 Buffer Pool 中的一个数据页，但是该数据页尚未刷新回磁盘，此时服务器挂了，Buffer Pool 中的数据修改就会丢失。那么这个 持久性 怎么保证？MySQL 通过 redo log 来保证基于 Buffer Pool 的数据修改在服务器恢复后不会丢失，也就是会在事务执行期间将对数据库的修改通">
-<meta name="keywords" content="InnoDB,MySQL">
+<meta name="keywords" content="MySQL,InnoDB">
 <meta property="og:type" content="article">
 <meta property="og:title" content="InnoDB redo log">
 <meta property="og:url" content="http://yoursite.com/2019/05/07/InnoDB-redo-log/index.html">
@@ -550,9 +550,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/InnoDB/" rel="tag"># InnoDB</a>
-          
             <a href="/tags/MySQL/" rel="tag"># MySQL</a>
+          
+            <a href="/tags/InnoDB/" rel="tag"># InnoDB</a>
           
         </div>
       

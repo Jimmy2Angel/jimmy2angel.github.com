@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="ZAB（ZooKeeper Atomic Broadcast 原子广播） 协议是为分布式协调服务 ZooKeeper 专门设计的一种支持崩溃恢复的原子广播协议。 在 ZooKeeper 中，主要依赖 ZAB 协议来实现分布式数据一致性，基于该协议，ZooKeeper 实现了一种主备模式的系统架构来保持集群中各个副本之间的数据一致性。">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-01-12T06:21:34.000Z">
+<meta property="og:updated_time" content="2019-05-30T01:00:05.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zookeeper ZAB 协议">
 <meta name="twitter:description" content="ZAB（ZooKeeper Atomic Broadcast 原子广播） 协议是为分布式协调服务 ZooKeeper 专门设计的一种支持崩溃恢复的原子广播协议。 在 ZooKeeper 中，主要依赖 ZAB 协议来实现分布式数据一致性，基于该协议，ZooKeeper 实现了一种主备模式的系统架构来保持集群中各个副本之间的数据一致性。">
@@ -365,7 +365,7 @@
 </li>
 <li><p>数据更新（事务请求） 客户端每发送一个更新请求，ZooKeeper 都会生成一个全局唯一的递增编号，这个编号反映了所有事务操作的先后顺序， 这个唯一编号就是事务ID(ZXID)，只有更新请求才算是事务请求。</p>
 </li>
-<li><p>为保证按照事务的 <code>ZXID</code> 先后顺序来处理，Leader 服务器会分别为每个 Follower 服务器创建一个队列，并将事务的先后顺序放入队列中， 并按照 FIFO 的策略进行消息发送。收到需要处理的事务后，Follower 服务器会首先以及事务日志的形式写入服务器的磁盘中，写入成功后 会向 Leader 服务器发送 ACK 响应。</p>
+<li><p>为保证按照事务的 <code>ZXID</code> 先后顺序来处理，Leader 服务器会分别为每个 Follower 服务器创建一个队列，并按事务的先后顺序放入队列中， 并按照 FIFO 的策略进行消息发送。收到需要处理的事务后，Follower 服务器会首先将其以事务日志的形式写入服务器的磁盘中，写入成功后 会向 Leader 服务器发送 ACK 响应。</p>
 </li>
 <li><p>当 Leader 服务器收到超过一半的 Follower 服务器的 ACK 响应后，会向所有 Follower 服务器广播 COMMIT 消息， 收到 COMMIT 消息的 Follower 服务器也会完成对事务的提交。 </p>
 </li>
