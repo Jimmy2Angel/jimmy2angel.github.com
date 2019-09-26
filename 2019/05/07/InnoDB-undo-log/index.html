@@ -99,7 +99,7 @@
 <meta property="og:description" content="众所周知，InnoDB 存储引擎有一个特点：支持事务。简单来说，事务就是一组要么都做，要么都不做的操作。那么在一个事务执行过程中，遇到异常或手动回滚时，怎么撤销刚刚执行的操作？这就要通过本篇文章要说的 undo log 来实现了。">
 <meta property="og:locale" content="default">
 <meta property="og:image" content="https://ws4.sinaimg.cn/large/006tNc79gy1g2totz0k3kj30vi0dyta6.jpg">
-<meta property="og:updated_time" content="2019-05-08T06:34:17.000Z">
+<meta property="og:updated_time" content="2019-06-19T07:45:40.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="InnoDB undo log">
 <meta name="twitter:description" content="众所周知，InnoDB 存储引擎有一个特点：支持事务。简单来说，事务就是一组要么都做，要么都不做的操作。那么在一个事务执行过程中，遇到异常或手动回滚时，怎么撤销刚刚执行的操作？这就要通过本篇文章要说的 undo log 来实现了。">
@@ -628,7 +628,7 @@
 <p>快照读就是上面说到的 ReadView，可以读到数据的历史版本。普通的 select 都属于快照读。</p>
 </li>
 <li><p><strong>当前读</strong></p>
-<p>当前读就是读取记录的最新版本。insert／update／delete／select…in share mode／select…for uodate 都属于当前读。</p>
+<p>当前读就是读取记录的最新版本。insert／update／delete／select…in share mode／select…for update 都属于当前读。</p>
 </li>
 </ul>
 <p>有关加锁的内容不在本文讨论范围。</p>
@@ -698,6 +698,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/09/26/Netty源码-服务端启动/" rel="prev" title="Netty 服务端启动源码">
+                Netty 服务端启动源码 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -766,7 +770,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>

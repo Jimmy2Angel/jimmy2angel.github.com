@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="Netty 是什么? 为什么要用 Netty?Netty 是一个异步事件驱动的网络应用框架，用于快速开发可维护的高性能服务器和客户端。 使用 Netty 而不使用 Java 原生 NIO 的原因如下：  使用 Java NIO 需要了解太多概念，编程复杂 Netty 底层 IO 模型切换简单，改改参数，直接从 NIO 模型变为 IO 模型 Netty 自带的拆包解包、异常检测等机制，让你只需要关注">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-02-19T05:48:37.000Z">
+<meta property="og:updated_time" content="2019-07-05T13:51:21.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty 入门使用总结">
 <meta name="twitter:description" content="Netty 是什么? 为什么要用 Netty?Netty 是一个异步事件驱动的网络应用框架，用于快速开发可维护的高性能服务器和客户端。 使用 Netty 而不使用 Java 原生 NIO 的原因如下：  使用 Java NIO 需要了解太多概念，编程复杂 Netty 底层 IO 模型切换简单，改改参数，直接从 NIO 模型变为 IO 模型 Netty 自带的拆包解包、异常检测等机制，让你只需要关注">
@@ -393,7 +393,7 @@
 </ul>
 <h1 id="拆包粘包理论与解决方案"><a href="#拆包粘包理论与解决方案" class="headerlink" title="拆包粘包理论与解决方案"></a>拆包粘包理论与解决方案</h1><h2 id="ByteBuf"><a href="#ByteBuf" class="headerlink" title="ByteBuf"></a>ByteBuf</h2><ul>
 <li>ByteBuf 是 Netty 中客户端与服务端交互的二进制数据载体</li>
-<li>ByteBuf 通过 readerIndex 和 readerIndex 两个指针划分可读字节和可写字节</li>
+<li>ByteBuf 通过 readerIndex 和 writerIndex 两个指针划分可读字节和可写字节</li>
 <li>从 ByteBuf 中每读取一个字节，readerIndex 自增1，ByteBuf 里面总共有 writerIndex-readerIndex 个字节可读,<br>由此可以推论出当 readerIndex 与 writerIndex 相等的时候，ByteBuf 不可读</li>
 <li>写数据是从 writerIndex 指向的部分开始写，每写一个字节，writerIndex 自增1，直到增到 capacity，这个时候，表示 ByteBuf 已经不可写了</li>
 <li>ByteBuf 里面其实还有一个参数 maxCapacity，当向 ByteBuf 写数据的时候，如果容量不足，那么这个时候可以进行扩容，<br>直到 capacity 扩容到 maxCapacity，超过 maxCapacity 就会报错</li>
@@ -558,7 +558,7 @@
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">31</span>
+                <span class="site-state-item-count">32</span>
                 <span class="site-state-item-name">posts</span>
               </a>
             </div>
