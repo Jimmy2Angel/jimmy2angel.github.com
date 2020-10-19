@@ -98,7 +98,7 @@
 <meta property="og:site_name" content="小白爬坑之旅">
 <meta property="og:description" content="前面通过源码分析了服务端启动时做了以下这些事：  初始化 channel 注册到 eventLoop 的 selector 上 触发 handlerAdded、ChannelRegistered 事件 进行端口绑定 触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_ACCEPT  客户端启动时做了以下这些事：  初始化 channel 注">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2019-09-27T14:38:43.000Z">
+<meta property="og:updated_time" content="2020-02-05T09:01:30.000Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Netty Reactor线程启动及执行">
 <meta name="twitter:description" content="前面通过源码分析了服务端启动时做了以下这些事：  初始化 channel 注册到 eventLoop 的 selector 上 触发 handlerAdded、ChannelRegistered 事件 进行端口绑定 触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_ACCEPT  客户端启动时做了以下这些事：  初始化 channel 注">
@@ -369,7 +369,7 @@
 <li>初始化 channel 注册到 eventLoop 的 selector 上</li>
 <li>触发 handlerAdded、ChannelRegistered 事件</li>
 <li>发送连接请求，修改 selectionKey 的 interestOps 为 OP_CONNECT</li>
-<li>连接建立后，触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_ACCEPT</li>
+<li>连接建立后，触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_READ</li>
 </ul>
 <p>但是并没有去研究 Netty 的核心 Reactor 线程模型是什么样的，以及服务端如何接收一个客户端新连接的，现在我们通过跟踪源码来了解一下。<a id="more"></a></p>
 <h2 id="Reactor-线程启动及执行"><a href="#Reactor-线程启动及执行" class="headerlink" title="Reactor 线程启动及执行"></a>Reactor 线程启动及执行</h2><p>Netty 中的 Reactor 模型可以自由配置成 <code>单线程模型</code>、<code>多线程模型</code> 和 <code>主从多线程模型</code>，这里不做过多解释；</p>
@@ -659,6 +659,20 @@
 
         
         
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://yangmao.me" title="Title" target="_blank">Title</a>
+                </li>
+              
+            </ul>
+          </div>
+        
 
         
 
@@ -698,7 +712,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>

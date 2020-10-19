@@ -370,7 +370,7 @@
 <li>初始化 channel 注册到 eventLoop 的 selector 上</li>
 <li>触发 handlerAdded、ChannelRegistered 事件</li>
 <li>发送连接请求，修改 selectionKey 的 interestOps 为 OP_CONNECT</li>
-<li>连接建立后，触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_ACCEPT</li>
+<li>连接建立后，触发 ChannelActive 事件，修改 selectionKey 的 interestOps 为 OP_READ</li>
 </ul>
 <p>但是并没有去研究 Netty 的核心 Reactor 线程模型是什么样的，以及服务端如何接收一个客户端新连接的，现在我们通过跟踪源码来了解一下。
           <!--noindex-->
@@ -1855,6 +1855,20 @@
 
         
         
+          <div class="links-of-blogroll motion-element links-of-blogroll-block">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              友情链接
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="https://yangmao.me" title="Title" target="_blank">Title</a>
+                </li>
+              
+            </ul>
+          </div>
+        
 
         
 
@@ -1878,7 +1892,7 @@
         <div class="copyright">
   
   &copy;  2017 - 
-  <span itemprop="copyrightYear">2019</span>
+  <span itemprop="copyrightYear">2020</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
